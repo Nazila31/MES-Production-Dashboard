@@ -1,0 +1,368 @@
+/* ==========================================================
+    DASHBOARD PAGE
+========================================================== */
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ===========================
+    Page Title
+=========================== */
+.page-title{
+    font-size:25px;
+    font-weight:700;
+}
+
+@media(max-width:992px){
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+        .page-subtitle {
+        display: block; /* Memaksa subtitle turun ke bawahnya */
+        width: 100%;
+    }
+}
+
+/* ==========================================================
+    Dashboard Card
+========================================================== */
+.dashboard-card{
+    background:#fff;
+    border:1px solid var(--border-color);
+    border-radius:18px;
+    padding:15px;
+    height:100%;
+    box-shadow:var(--shadow-sm);
+    transition:all .3s ease;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 35px rgba(37,99,235,.08);
+}
+
+/* ==========================================================
+    Card Top
+========================================================== */
+
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+}
+
+/* ==========================================================
+    Card Icon
+========================================================== */
+.card-icon{
+    width:40px;
+    height:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:10px;
+    font-size:22px;
+}
+
+/* ==========================================================
+    Card Body
+========================================================== */
+
+.card-title{
+    display:block;
+    color:var(--text-muted);
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.card-value{
+    font-size:25px;
+    font-weight:600;
+    line-height:1;
+}
+
+/* ==========================================================
+    Card Footer
+========================================================== */
+.card-footer-custom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:15px;
+    font-size:13px;
+}
+
+/* ==========================================================
+    Section Header
+========================================================== */
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-header h5{
+    margin:0;
+    font-size:20px;
+    font-weight:600;
+}
+
+.section-header small{
+    color:var(--text-muted);
+}
+
+/* ==========================================================
+    Chart Placeholder
+========================================================== */
+
+.chart-placeholder{
+    height:320px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    border:2px dashed var(--border-color);
+    border-radius:14px;
+    color:var(--text-muted);
+}
+
+.chart-placeholder i{
+    font-size:48px;
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+.chart-placeholder h6{
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.chart-placeholder p{
+    font-size:14px;
+}
+
+/* ==========================================================
+    Deadline Reminder
+========================================================== */
+.deadline-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.deadline-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border-radius:12px;
+    background:#F8FAFC;
+    transition:all .25s ease;
+}
+
+.deadline-item:hover{
+    background:#F1F5F9;
+    transform:translateX(5px);
+}
+
+.deadline-item strong{
+    display:block;
+    font-size:15px;
+    margin-bottom:2px;
+}
+
+.deadline-item p{
+    margin:0;
+    font-size:13px;
+    color:var(--text-muted);
+}
+
+.deadline-item span{
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ==========================================================
+    Recent Activity
+========================================================== */
+
+.activity-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.activity-item{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    border-radius:12px;
+    border-left:4px solid transparent;
+    transition:all .25s ease;
+}
+
+.activity-item:hover{
+    background:#F8FAFC;
+    padding: 8px;
+}
+
+.activity-icon{
+    width:46px;
+    height:46px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    font-size:18px;
+}
+
+.activity-content{
+    flex:1;
+}
+
+.activity-content h6{
+    margin-bottom:0;
+    font-weight:600;
+}
+
+.activity-content p{
+    margin:0;
+    font-size:14px;
+    color:var(--text-muted);
+}
+
+.activity-item small{
+    color:var(--text-muted);
+    font-size:12px;
+}
+
+/* =========================================
+    Dashboard Chart
+========================================= */
+.dashboard-chart{
+    position:relative;
+    height:340px;
+    width:100%;
+}
+
+.dashboard-chart canvas{
+    width:100% !important;
+    height:100% !important;
+}
+
+/* ==========================================================
+    Floating Add Project Button
+========================================================== */
+
+.floating-add{
+
+    position:fixed;
+
+    right:30px;
+    bottom:30px;
+
+    width:62px;
+    height:62px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#2563EB,#1D4ED8);
+
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:26px;
+
+    text-decoration:none;
+
+    box-shadow:0 12px 28px rgba(37,99,235,.35);
+
+    z-index:999;
+
+    transition:.3s ease;
+
+}
+
+.floating-add:hover{
+
+    transform:translateY(-6px) scale(1.08);
+
+    color:#fff;
+
+    box-shadow:0 18px 36px rgba(37,99,235,.45);
+
+}
+
+.floating-add i{
+
+    transition:.3s;
+
+}
+
+.floating-add:hover i{
+
+    transform:rotate(90deg);
+
+}
+
+/* Floating Animation */
+
+@keyframes floating{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+.floating-add{
+
+    animation:floating 3s ease-in-out infinite;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .floating-add{
+
+        right:20px;
+        bottom:20px;
+
+        width:56px;
+        height:56px;
+
+        font-size:22px;
+
+    }
+
+}
+
+/* ==========================================================
+    Color Variant
+========================================================== */
+.primary, .success, .warning, .danger {
+    background: rgba(22, 163, 74, 0.1) !important; /* Hijau transparan */
+    color: #16A34A !important;                    /* Hijau solid untuk ikon */
+}
+
+.text-success, .text-warning, .text-danger {
+    color: #16A34A !important; /* Mengubah semua teks & panah menjadi hijau */
+}

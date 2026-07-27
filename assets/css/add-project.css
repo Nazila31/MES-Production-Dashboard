@@ -1,0 +1,242 @@
+/* ==========================================================
+   ADD PROJECT PAGE
+========================================================== */
+
+/* Header */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.page-title{
+    font-size:30px;
+    font-weight:700;
+    color:#0F172A;
+}
+
+.page-subtitle{
+    color:#64748B;
+    margin-top:6px;
+    font-size:15px;
+}
+
+/* ==========================================================
+   Card
+========================================================== */
+
+.card-default{
+    background:#FFFFFF;
+    border:1px solid #E5E7EB;
+    border-radius:18px;
+    padding:34px;
+    box-shadow:0 10px 35px rgba(15,23,42,.05);
+}
+
+/* ==========================================================
+   Form
+========================================================== */
+
+.form-label{
+    font-weight:600;
+    color:#334155;
+    margin-bottom:8px;
+}
+
+.form-control,
+.form-select{
+
+    height:48px;
+
+    border-radius:12px;
+
+    border:1px solid #D6DEE8;
+
+    box-shadow:none;
+
+    transition:.25s;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 .18rem rgba(37,99,235,.12);
+
+}
+
+textarea.form-control{
+
+    min-height:150px;
+
+    resize:vertical;
+
+    padding-top:14px;
+
+}
+
+/* ==========================================================
+   Buttons
+========================================================== */
+
+.btn-outline-secondary {
+    border: 1px solid #CBD5E1;
+    color: #475569;
+}
+
+.btn-outline-secondary:hover {
+    background: #2563EB;
+    border-color: #94A3B8;
+}
+
+.btn-primary {
+    background: #2563EB;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #1D4ED8;
+}
+
+.form-action {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 35px;
+}
+
+.form-action .btn {
+    min-width: 130px;
+    height: 46px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* ==========================================================
+   Form Grid
+========================================================== */
+
+.form-section{
+
+    margin-bottom:18px;
+
+}
+
+.form-section:last-child{
+
+    margin-bottom:0;
+
+}
+
+/* ==========================================================
+   Input Icon (optional)
+========================================================== */
+
+.input-group-text{
+
+    background:#FFFFFF;
+
+    border:1px solid #D6DEE8;
+
+    border-right:none;
+
+    border-radius:12px 0 0 12px;
+
+}
+
+.input-group .form-control{
+
+    border-left:none;
+
+    border-radius:0 12px 12px 0;
+
+}
+
+/* ==========================================================
+   Required
+========================================================== */
+
+.required{
+
+    color:#DC2626;
+
+}
+
+/* ==========================================================
+   Animation
+========================================================== */
+
+.card-default{
+
+    animation:fadeUp .45s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media(max-width:992px){
+
+    .card-default{
+
+        padding:25px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
+
+@media(max-width:576px){
+
+    .content{
+
+        padding:20px;
+
+    }
+
+    .card-default{
+
+        padding:20px;
+
+    }
+
+    .page-title{
+
+        font-size:24px;
+
+    }
+
+}

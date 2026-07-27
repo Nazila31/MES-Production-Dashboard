@@ -1,0 +1,37 @@
+/* ==========================================================
+    NOTIFICATIONS PAGE
+========================================================== */
+
+.notification-page-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.notification-page-item.unread {
+    border-left: 4px solid var(--primary);
+    background: #F8FAFC;
+}
+
+.notification-page-item:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.notification-page-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #EFF6FF;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
