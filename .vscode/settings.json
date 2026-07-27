@@ -1,0 +1,13 @@
+{
+    "liveServer.settings.port": 5501,
+    "php.validate.executablePath": "C:\\laragon\\bin\\php\\php-8.5.8-nts-Win32-vs17-x64\\php.exe",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell (Laragon PHP 8.5)": {
+            "source": "PowerShell",
+            "env": {
+                "PATH": "C:\\laragon\\bin\\php\\php-8.5.8-nts-Win32-vs17-x64;${env:PATH}"
+            }
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell (Laragon PHP 8.5)"
+}

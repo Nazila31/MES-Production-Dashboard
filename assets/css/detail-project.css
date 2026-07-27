@@ -1,0 +1,363 @@
+/* ==========================================================
+   DETAIL PROJECT
+========================================================== */
+
+/* Header */
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.page-header h2{
+    font-weight:700;
+    color:#0F172A;
+}
+
+.page-header p{
+    color:#64748B;
+    margin:0;
+}
+
+.page-header .btn{
+    margin-left:10px;
+}
+
+
+/* ==========================================================
+   Card
+========================================================== */
+
+.card-default{
+
+    background:#FFFFFF;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:18px;
+
+    padding:30px;
+
+    box-shadow:0 10px 25px rgba(15,23,42,.05);
+
+}
+
+
+/* ==========================================================
+   Detail Item
+========================================================== */
+
+.detail-item{
+
+    margin-bottom:26px;
+
+}
+
+.detail-item label{
+
+    display:block;
+
+    font-size:13px;
+
+    color:#94A3B8;
+
+    margin-bottom:8px;
+
+    font-weight:500;
+
+}
+
+.detail-item h6{
+
+    margin:0;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    color:#0F172A;
+
+}
+
+
+/* ==========================================================
+   Badge
+========================================================== */
+
+.badge{
+
+    padding:8px 14px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+/* ==========================================================
+   Progress
+========================================================== */
+
+.progress{
+
+    height:14px;
+
+    border-radius:50px;
+
+    background:#E2E8F0;
+
+}
+
+.progress-bar{
+
+    border-radius:50px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+/* ==========================================================
+   Description
+========================================================== */
+
+.card-default h5{
+
+    font-weight:600;
+
+    margin-bottom:18px;
+
+    color:#0F172A;
+
+}
+
+.card-default p{
+
+    line-height:1.8;
+
+    color:#475569;
+
+    margin:0;
+
+}
+
+
+/* ==========================================================
+   Timeline
+========================================================== */
+
+.timeline{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+    position:relative;
+
+}
+
+.timeline::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:13px;
+
+    top:0;
+
+    width:2px;
+
+    height:100%;
+
+    background:#E2E8F0;
+
+}
+
+.timeline li{
+
+    position:relative;
+
+    padding-left:45px;
+
+    margin-bottom:24px;
+
+    font-size:15px;
+
+    color:#475569;
+
+    font-weight:500;
+
+}
+
+.timeline li:last-child{
+
+    margin-bottom:0;
+
+}
+
+.timeline li i{
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:28px;
+
+    height:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#F8FAFC;
+
+    font-size:15px;
+
+    z-index:2;
+
+}
+
+
+/* Completed */
+
+.timeline li.completed i{
+
+    color:#16A34A;
+
+    background:#DCFCE7;
+
+}
+
+.timeline li.completed{
+
+    color:#16A34A;
+
+}
+
+
+/* Active */
+
+.timeline li.active i{
+
+    color:#2563EB;
+
+    background:#DBEAFE;
+
+}
+
+.timeline li.active{
+
+    color:#2563EB;
+
+    font-weight:600;
+
+}
+
+
+/* Pending */
+
+.timeline li:not(.completed):not(.active) i{
+
+    color:#94A3B8;
+
+    background:#F1F5F9;
+
+}
+
+
+/* ==========================================================
+   Hover
+========================================================== */
+
+.card-default{
+
+    transition:.3s;
+
+}
+
+.card-default:hover{
+
+    box-shadow:0 15px 35px rgba(37,99,235,.08);
+
+}
+
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media(max-width:992px){
+
+.page-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:18px;
+
+}
+
+.page-header .btn{
+
+margin-left:0;
+
+margin-top:8px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.card-default{
+
+padding:22px;
+
+}
+
+.timeline li{
+
+font-size:14px;
+
+}
+
+.detail-item h6{
+
+font-size:15px;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.content{
+
+padding:20px;
+
+}
+
+.page-header .btn{
+
+width:100%;
+
+}
+
+}

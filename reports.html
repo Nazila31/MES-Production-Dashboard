@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | Manufacturing Execution System</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/reports.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div>
+                <a href="index.html" class="company-logo">
+                    <img src="assets/img/logo.PNG" alt="PT Karya Machindo Industries">
+                    <div class="company-info">
+                        <small>Manufacturing Execution System</small>
+                    </div>
+                </a>
+
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="index.html">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="projects.html">
+                            <i class="bi bi-folder2-open"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reports.html" class="active">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div>
+                        <h5 class="mb-0">Reports</h5>
+                        <small class="text-muted">Home / Reports</small>
+                    </div>
+                </div>
+
+                <div class="navbar-right">
+                    <div class="notification-wrapper">
+                        <button class="notification-btn" id="notificationToggle">
+                            <i class="bi bi-bell"></i>
+                            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+                        </button>
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">Notifications</div>
+                            <div class="notification-empty" id="notificationList">
+                                <i class="bi bi-bell-slash fs-2 text-secondary"></i>
+                                <p class="mt-3 mb-1">No Notifications</p>
+                                <small class="text-muted">Import project data to receive notifications.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-wrapper">
+                        <button class="profile-button" id="profileToggle">
+                            <img src="assets/img/avatar.png" alt="Admin">
+                            <div class="profile-info">
+                                <strong>Admin</strong>
+                                <small>System Administrator</small>
+                            </div>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="profile-header">
+                                <img src="assets/img/avatar.png" alt="Admin">
+                                <div>
+                                    <h6>Admin</h6>
+                                    <small>System Administrator</small>
+                                </div>
+                            </div>
+                            <a href="#"><i class="bi bi-person-circle"></i><span>My Profile</span></a>
+                            <a href="#"><i class="bi bi-gear"></i><span>System Settings</span></a>
+                            <a href="#"><i class="bi bi-bell"></i><span>Notifications</span></a>
+                            <a href="#"><i class="bi bi-info-circle"></i><span>About MES</span></a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="content">
+                <div class="reports-header">
+                    <div>
+                        <h1 class="page-title">Production Reports</h1>
+                        <p class="page-subtitle">Analyze production performance, efficiency, and manufacturing statistics.</p>
+                    </div>
+                    <button class="btn btn-primary" id="exportCSV">
+                        <i class="bi bi-download"></i>
+                        Export CSV
+                    </button>
+                </div>
+
+                <!-- Filter -->
+                <div class="card-default report-filter">
+                    <div class="row g-3">
+                        <div class="col-lg-3">
+                            <input type="month" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-select">
+                                <option>Department</option>
+                                <option>PPIC</option>
+                                <option>Production</option>
+                                <option>Assembly</option>
+                                <option>Quality Control</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <select class="form-select">
+                                <option>Status</option>
+                                <option>Completed</option>
+                                <option>In Production</option>
+                                <option>Delayed</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-outline-primary w-100">
+                                <i class="bi bi-funnel"></i>
+                                Generate Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="row g-4 mt-2">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="report-card">
+                            <div class="report-icon report-primary">
+                                <i class="bi bi-folder-check"></i>
+                            </div>
+                            <h6>Total Orders</h6>
+                            <h2 id="reportTotalOrders">0</h2>
+                            <small>No data available</small>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="report-card">
+                            <div class="report-icon report-success">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <h6>Completed</h6>
+                            <h2 id="reportCompleted">0</h2>
+                            <small>No data available</small>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="report-card">
+                            <div class="report-icon report-warning">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <h6>Delayed</h6>
+                            <h2 id="reportDelayed">0</h2>
+                            <small>No data available</small>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="report-card">
+                            <div class="report-icon report-info">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                            <h6>Efficiency</h6>
+                            <h2 id="reportEfficiency">0%</h2>
+                            <small>No data available</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6">
+                        <div class="card-default h-100">
+                            <div class="section-header">
+                                <div>
+                                    <h5>Monthly Production</h5>
+                                    <small>Sales Order Trend</small>
+                                </div>
+                            </div>
+                            <div class="report-chart">
+                                <canvas id="productionChart"></canvas>
+                            </div>
+                            <p class="empty-chart-text" id="productionChartText">No production data available.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card-default h-100">
+                            <div class="section-header">
+                                <div>
+                                    <h5>Department Distribution</h5>
+                                    <small>Current Workload</small>
+                                </div>
+                            </div>
+                            <div class="report-chart-small">
+                                <canvas id="departmentChart"></canvas>
+                            </div>
+                            <p class="empty-chart-text" id="departmentChartText">No department data available.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card-default h-100">
+                            <div class="section-header">
+                                <div>
+                                    <h5>Production Status</h5>
+                                    <small>Order Progress</small>
+                                </div>
+                            </div>
+                            <div class="report-chart-small">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                            <p class="empty-chart-text" id="statusChartText">No status data available.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Production Summary Table -->
+                <div class="card-default mt-4">
+                    <div class="section-header">
+                        <div>
+                            <h5>Production Summary</h5>
+                            <small>Monthly manufacturing performance</small>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table report-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Sales Order</th>
+                                    <th>Completed</th>
+                                    <th>Delayed</th>
+                                    <th>Efficiency</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-5">
+                                        <i class="bi bi-table fs-1 text-secondary"></i>
+                                        <h5 class="mt-3 mb-2">No Report Data</h5>
+                                        <p class="text-muted mb-0">Import an Excel file to display production summary.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    © 2026 PT Karya Machindo Industries
+                    <br>
+                    Manufacturing Execution System v1.0
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/reports.js"></script>
+    <script src="assets/js/charts.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
