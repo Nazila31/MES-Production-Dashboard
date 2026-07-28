@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SO Detail | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/detail-project.css">
+    <link rel="stylesheet" href="../../assets/css/add-project.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="sales-orders" data-title="SO Detail" data-breadcrumb="Sales Orders / Detail">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>Manufacturing Execution System</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">SO Detail</h5><small class="text-muted">Sales Orders / Detail</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2>Sales Order Information</h2><p>Production project detail</p></div><a href="index.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a></div>
+                <div class="card-default">
+                    <div class="row">
+                        <div class="col-md-6 detail-item"><label>SO Number</label><h6 id="soNumber">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Quotation</label><h6 id="quotationNumber">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>SPK Global</label><h6 id="spkGlobal">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Client</label><h6 id="client">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Machine</label><h6 id="machine">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>PIC</label><h6 id="pic">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Status</label><span class="badge-kustom" id="statusBadge">-</span></div>
+                        <div class="col-md-6 detail-item"><label>Start Date</label><h6 id="startDate">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Deadline</label><h6 id="deadline">-</h6></div>
+                        <div class="col-12 mt-3"><label class="mb-2">Progress</label><div class="progress"><div class="progress-bar bg-primary" id="progressBar" style="width:0%">0%</div></div></div>
+                    </div>
+                </div>
+                <div class="card-default mt-4"><h5>Description</h5><p id="description">-</p></div>
+                <div class="card-default mt-4"><h5 class="mb-4">Production Timeline</h5><ul class="timeline" id="productionTimeline"></ul></div>
+                <div class="card-default mt-4" id="qcRejectHistorySection" style="display:none;"><h5 class="mb-3">QC Reject History</h5><div id="qcRejectHistoryList"></div></div>
+                <div class="card-default mt-4" id="deliveryNoteSection" style="display:none;">
+                    <h5 class="mb-4">Input Surat Jalan</h5>
+                    <form id="deliveryNoteFormEl">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Nomor Surat Jalan</label><input type="text" name="delivery_number" class="form-control" required placeholder="SJ-001"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Tanggal</label><input type="date" name="delivery_date" class="form-control" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Tujuan / Penerima</label><input type="text" name="delivery_recipient" class="form-control" required placeholder="PT Client / Alamat"></div>
+                            <div class="col-md-12 mb-3"><label class="form-label">Keterangan</label><textarea name="delivery_note_notes" class="form-control" rows="3" placeholder="Keterangan surat jalan"></textarea></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Upload Surat Jalan</label><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-file-earmark-text"></i> Simpan Surat Jalan</button>
+                    </form>
+                </div>
+                <div class="card-default mt-4" id="deliveryInfoSection" style="display:none;">
+                    <h5 class="mb-4">Surat Jalan & Delivery Info</h5>
+                    <div class="row">
+                        <div class="col-md-6 detail-item"><label>Nomor Surat Jalan</label><h6 id="infoDeliveryNumber">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Tanggal Surat Jalan</label><h6 id="infoDeliveryDate">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Penerima</label><h6 id="infoDeliveryRecipient">-</h6></div>
+                        <div class="col-md-12 detail-item"><label>Keterangan</label><h6 id="infoDeliveryNotes">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Nomor Resi</label><h6 id="infoTrackingNumber">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Tanggal Pengiriman</label><h6 id="infoShipmentDate">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Ekspedisi / Kurir</label><h6 id="infoShipmentCourier">-</h6></div>
+                        <div class="col-md-12 detail-item"><label>Keterangan Delivery</label><h6 id="infoShipmentNotes">-</h6></div>
+                        <div class="col-12 mt-2">
+                            <button class="btn btn-outline-primary btn-sm" id="deliveryNotePreviewLink" style="display:none;"><i class="bi bi-eye"></i> Preview Surat Jalan</button>
+                            <button class="btn btn-outline-primary btn-sm ms-2" id="shipmentProofPreviewLink" style="display:none;"><i class="bi bi-eye"></i> Preview Bukti Pengiriman</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Surat Jalan Saved</h3><p>Project is now ready for delivery.</p><button class="btn btn-primary" onclick="finishFinalize()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/salesOrders.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/sales-order-detail.js"></script>
+</body>
+</html>

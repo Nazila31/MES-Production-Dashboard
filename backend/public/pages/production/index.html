@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/pages/production.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="production" data-title="Production" data-breadcrumb="Home / Production" data-roles="admin,production">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>Manufacturing Execution System</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Production</h5><small class="text-muted">Home / Production</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2 class="page-title">Production Operator</h2><span class="page-subtitle">Shop Floor / Active Work Orders</span></div></div>
+                <div class="operator-panel" id="operatorPanel">
+                    <div class="project-info-grid">
+                        <div class="project-info-item"><label>SO Number</label><h5 id="soNumber">-</h5></div>
+                        <div class="project-info-item"><label>Client</label><h5 id="client">-</h5></div>
+                        <div class="project-info-item"><label>Machine</label><h5 id="machine">-</h5></div>
+                        <div class="project-info-item"><label>Current Stage</label><span class="badge-kustom" id="stageBadge">-</span></div>
+                        <div class="project-info-item"><label>Deadline</label><h5 id="deadline">-</h5></div>
+                        <div class="project-info-item"><label>Stage Label</label><h5 id="currentStage">-</h5></div>
+                    </div>
+                    <div class="mb-3"><div class="progress" style="height:28px;"><div class="progress-bar bg-primary" id="progressBar" style="width:0%">0%</div></div></div>
+                    <div class="stage-steps" id="stageSteps"></div>
+                    <div class="text-center mt-4 d-flex flex-wrap gap-3 justify-content-center">
+                        <button class="stage-action-btn" id="startStageBtn"><i class="bi bi-play-circle"></i> Start</button>
+                        <button class="stage-action-btn" id="stageActionBtn"><i class="bi bi-check-circle"></i> Finish Stage</button>
+                        <button class="btn btn-success btn-lg" id="passQcBtn" style="display:none;"><i class="bi bi-shield-check"></i> Pass QC</button>
+                        <button class="btn btn-danger btn-lg" id="rejectQcBtn" style="display:none;"><i class="bi bi-x-circle"></i> Reject QC</button>
+                    </div>
+                </div>
+                <footer class="footer">© 2026 PT Karya Machindo Industries<br>Manufacturing Execution System v2.0</footer>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Stage Updated</h3><button class="btn btn-primary" onclick="reloadProductionPage()">Continue</button></div></div>
+    <div class="delete-overlay" id="rejectModal"><div class="delete-card" style="max-width:520px;"><h3>Reject QC</h3>
+        <label class="form-label">Alasan Reject</label>
+        <textarea class="form-control mb-3" id="rejectNotes" rows="4" placeholder="Wajib diisi — jelaskan alasan penolakan..." required></textarea>
+        <label class="form-label">Kembalikan ke proses</label>
+        <select class="form-select mb-3" id="rejectReturnStage" required>
+            <option value="">Pilih proses...</option>
+            <option value="fabrication">Fabrication</option>
+            <option value="machining">Machining</option>
+            <option value="assembly">Assembly</option>
+        </select>
+        <div class="delete-action"><button class="btn btn-light" onclick="closeRejectModal()">Cancel</button><button class="btn btn-danger" onclick="submitRejectQc()">Submit Reject</button></div></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/production.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/production.js"></script>
+</body>
+</html>

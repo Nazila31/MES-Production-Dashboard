@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Orders | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/projects.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="sales-orders" data-title="Sales Orders" data-breadcrumb="Home / Sales Orders" data-roles="admin">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>Manufacturing Execution System</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Sales Orders</h5><small class="text-muted">Home / Sales Orders</small></div></div></header>
+            <main class="content">
+                <div class="page-header">
+                    <div><h2 class="page-title">Sales Orders</h2><span class="page-subtitle">Admin / Sales Order Management</span></div>
+                    <button class="btn btn-primary" onclick="openCreateSOModal()"><i class="bi bi-plus-circle"></i> Generate SO</button>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-cart-check"></i></div><div><small>Total SO</small><h3 id="totalCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-hourglass-split"></i></div><div><small>Waiting PPIC</small><h3 id="waitingCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-gear-wide-connected"></i></div><div><small>In Production</small><h3 id="productionCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-check-circle"></i></div><div><small>Completed</small><h3 id="completedCount">0</h3></div></div></div>
+                </div>
+                <div class="card-default mb-4">
+                    <div class="row g-3">
+                        <div class="col-lg-6"><input type="text" id="searchInput" class="form-control" placeholder="Search SO Number / Client..."></div>
+                        <div class="col-lg-3"><select class="form-select" id="statusFilter"><option value="all">All Status</option><option value="waiting_ppic">Waiting PPIC</option><option value="in_production">In Production</option><option value="qc_passed">QC Passed</option><option value="completed">Completed</option></select></div>
+                        <div class="col-lg-3"><button class="btn btn-outline-secondary w-100" onclick="resetFilter()"><i class="bi bi-arrow-clockwise"></i> Reset</button></div>
+                    </div>
+                </div>
+                <div class="card-default">
+                    <div class="table-responsive">
+                        <table class="table align-middle project-table">
+                            <thead><tr><th>SO Number</th><th>Quotation</th><th>Client</th><th>SPK Global</th><th>Progress</th><th>Status</th><th>Deadline</th><th>Action</th></tr></thead>
+                            <tbody id="dataTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer"><div class="table-info">Showing 0 of 0 Sales Orders</div></div>
+                </div>
+                <footer class="footer">© 2026 PT Karya Machindo Industries<br>Manufacturing Execution System v2.0</footer>
+            </main>
+        </div>
+    </div>
+    <div class="delete-overlay" id="createSOModal">
+        <div class="delete-card" style="max-width:480px;">
+            <h3>Generate Sales Order</h3>
+            <p>Enter Sales Order and SPK Global numbers, then convert the approved quotation.</p>
+            <select class="form-select mb-3" id="quotationSelect"><option value="">Select Approved Quotation</option></select>
+            <label class="form-label">Sales Order Number</label>
+            <input type="text" class="form-control mb-3" id="soNumberInput" placeholder="SO260727001">
+            <label class="form-label">SPK Global Number</label>
+            <input type="text" class="form-control mb-3" id="spkGlobalInput" placeholder="SPK260727001">
+            <div class="delete-action">
+                <button class="btn btn-light" onclick="closeCreateSOModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="generateSO()">Generate SO</button>
+            </div>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Sales Order Created</h3><p>Sales Order and SPK Global have been saved.</p><button class="btn btn-primary" onclick="finishCreate()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/quotations.js"></script>
+    <script src="../../assets/js/api/salesOrders.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/sales-orders-list.js"></script>
+</body>
+</html>

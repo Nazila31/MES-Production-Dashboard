@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotations | Manufacturing Execution System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/projects.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="quotations" data-title="Quotations" data-breadcrumb="Home / Quotations" data-roles="admin,marketing">
+    <div class="app">
+        <aside class="sidebar">
+            <div>
+                <a href="../../index.html" class="company-logo">
+                    <img src="../../assets/img/logo.PNG" alt="PT Karya Machindo Industries">
+                    <div class="company-info"><small>Manufacturing Execution System</small></div>
+                </a>
+                <ul class="sidebar-menu"></ul>
+            </div>
+        </aside>
+        <div class="main-wrapper">
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button>
+                    <div><h5 class="mb-0">Quotations</h5><small class="text-muted">Home / Quotations</small></div>
+                </div>
+                <div class="navbar-right">
+                    <div class="notification-wrapper">
+                        <button class="notification-btn" id="notificationToggle"><i class="bi bi-bell"></i><span class="notification-badge" id="notificationBadge" style="display:none;">0</span></button>
+                        <div class="notification-dropdown" id="notificationDropdown"><div class="notification-header">Notifications</div><div id="notificationList"></div></div>
+                    </div>
+                    <div class="profile-wrapper">
+                        <button class="profile-button" id="profileToggle"><img src="../../assets/img/avatar.png" alt="Admin"><div class="profile-info"><strong>Admin</strong><small>Marketing</small></div><i class="bi bi-chevron-down"></i></button>
+                        <div class="profile-dropdown" id="profileDropdown"><div class="profile-header"><img src="../../assets/img/avatar.png" alt="Admin"><div><h6>Admin</h6><small>Marketing</small></div></div></div>
+                    </div>
+                </div>
+            </header>
+            <main class="content">
+                <div class="page-header">
+                    <div><h2 class="page-title">Quotations</h2><span class="page-subtitle">Marketing / Quotation Management</span></div>
+                    <a href="add.html" class="btn btn-primary"><i class="bi bi-plus-circle"></i> New Quotation</a>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-file-earmark-text"></i></div><div><small>Total</small><h3 id="totalCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-pencil-square"></i></div><div><small>Draft</small><h3 id="draftCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-check-circle"></i></div><div><small>Approved</small><h3 id="approvedCount">0</h3></div></div></div>
+                    <div class="col-lg-3 col-md-6"><div class="summary-card"><div class="summary-icon icon-green"><i class="bi bi-x-circle"></i></div><div><small>Rejected</small><h3 id="rejectedCount">0</h3></div></div></div>
+                </div>
+                <div class="card-default mb-4">
+                    <div class="row g-3">
+                        <div class="col-lg-6"><input type="text" id="searchInput" class="form-control" placeholder="Search Quotation / Client..."></div>
+                        <div class="col-lg-3"><select class="form-select" id="statusFilter"><option value="all">All Status</option><option value="draft">Draft</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+                        <div class="col-lg-3"><button class="btn btn-outline-secondary w-100" onclick="resetFilter()"><i class="bi bi-arrow-clockwise"></i> Reset</button></div>
+                    </div>
+                </div>
+                <div class="card-default">
+                    <div class="table-responsive">
+                        <table class="table align-middle project-table">
+                            <thead><tr><th>Quotation No</th><th>Client</th><th>Machine</th><th>Amount</th><th>Status</th><th>Deadline</th><th>Action</th></tr></thead>
+                            <tbody id="dataTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer"><div class="table-info">Showing 0 of 0 Quotations</div></div>
+                </div>
+                <footer class="footer">© 2026 PT Karya Machindo Industries<br>Manufacturing Execution System v2.0</footer>
+            </main>
+        </div>
+    </div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/quotations.js"></script>
+    <script src="../../assets/js/api/notifications.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/components/notifications-ui.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/quotations-list.js"></script>
+</body>
+</html>

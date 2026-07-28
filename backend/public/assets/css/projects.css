@@ -1,0 +1,521 @@
+/* ==========================================================
+    PROJECTS PAGE
+========================================================== */
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.page-header .btn{
+    border-radius:10px;
+    padding:10px 15px;
+    font-weight:500;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:700;
+}
+
+@media(max-width:992px){
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+        .page-subtitle {
+        display: block;
+        width: 100%;
+    }
+}
+
+
+
+/* ==========================================================
+    Filter Card
+========================================================== */
+.card-default{
+    background:#fff;
+    border:1px solid var(--border-color);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:var(--shadow-sm);
+}
+
+.form-control,
+.form-select{
+    height:42px;
+    border:1px solid var(--border-color);
+    border-radius:10px;
+    box-shadow:none;
+    transition:.25s;
+}
+
+.form-control:hover,
+.form-select:hover{
+    border-color:#D1D5DB;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#162ba3;
+    box-shadow:0 0 0 .15rem rgba(37,99,235,.15);
+}
+
+/* ==========================================================
+    Project Table
+========================================================== */
+.project-table{
+    margin-bottom:0;
+}
+
+.project-table thead th{
+
+    background:#F8FAFC;
+
+    color:#475569;
+
+    font-weight:600;
+
+    border:none;
+
+    padding:18px 20px;
+
+    font-size:14px;
+
+}
+
+.project-table tbody td{
+
+    padding:22px 20px;
+
+    vertical-align:middle;
+
+    border-color:#EEF2F7;
+
+    font-size:15px;
+
+}
+
+.project-table tbody tr{
+
+    transition:.25s;
+
+}
+
+.project-table tbody tr:hover{
+
+    background:#F8FAFC;
+
+}
+
+/* ==========================================================
+    KUSTOM PROGRESS BAR MODERN (Subtle Aesthetic)
+========================================================== */
+.progress {
+    height: 8px; /* Dibuat sedikit lebih tipis agar elegan */
+    background-color: #F1F5F9; /* Abu-abu dasar super soft */
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 30px;
+    font-size: 0px; /* Menghilangkan teks persen di dalam bar agar lebih clean */
+}
+
+/* Warna Progress Bar Kustom */
+.progress-waiting { background-color: #94A3B8 !important; }
+.progress-production { background-color: #F59E0B !important; }
+.progress-ppic { background-color: #3B82F6 !important; }
+.progress-machining { background-color: #8B5CF6 !important; }
+.progress-assembly { background-color: #06B6D4 !important; }
+.progress-qc { background-color: #EC4899 !important; }
+.progress-completed { background-color: #10B981 !important; }
+.progress-delayed { background-color: #EF4444 !important; }
+
+
+/* ==========================================================
+    KUSTOM BADGE STATUS MODERN (Professional Tint)
+========================================================== */
+.badge-kustom {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 10px;
+    font-weight: 600; /* Teks semi-bold agar tegas */
+    border-radius: 8px; /* Bentuk kotak melengkung modern, bukan kapsul bulatan */
+    text-align: center;
+}
+
+.status-waiting {
+    background-color: rgba(148, 163, 184, 0.15) !important;
+    color: #64748B !important;
+}
+
+.status-production {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    color: #D97706 !important;
+}
+
+.status-ppic {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    color: #2563EB !important;
+}
+
+.status-machining {
+    background-color: rgba(139, 92, 246, 0.1) !important;
+    color: #7C3AED !important;
+}
+
+.status-assembly {
+    background-color: rgba(6, 182, 212, 0.1) !important;
+    color: #0891B2 !important;
+}
+
+.status-qc {
+    background-color: rgba(236, 72, 153, 0.1) !important;
+    color: #DB2777 !important;
+}
+
+.status-completed {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: #059669 !important;
+}
+
+.status-delayed {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #DC2626 !important;
+}
+
+/* ==========================================================
+    Badge
+========================================================== */
+
+.badge{
+
+    padding:7px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:500;
+
+}
+
+/* ==========================================================
+    Action Buttons
+========================================================== */
+/* ==========================================================
+    Action Buttons Modern & Profesional (Clean Style)
+========================================================= */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Jarak antar tombol yang pas */
+}
+
+/* 1. Kondisi Awal: Minimalis, Bersih, dan Berwarna Abu-abu Standar */
+.action-buttons .btn-action-kustom {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px; /* Sudut sedikit melengkung profesional */
+    background-color: #F8FAFC !important; /* Latar abu-abu sangat muda */
+    border: 1px solid #E2E8F0 !important; /* Garis tepi abu-abu halus */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Warna ikon awal (Abu-abu gelap, tidak mencolok) */
+.action-buttons .btn-action-kustom i {
+    font-size: 14px;
+    color: #64748B !important; 
+    transition: color 0.2s ease-in-out;
+}
+
+/* 2. Kondisi Hover: Berubah Menjadi Biru Transparan Elegan saat Disentuh */
+.action-buttons .btn-action-kustom:hover {
+    background-color: rgba(37, 99, 235, 0.08) !important; /* Biru transparan tipis (8%) */
+    border-color: rgba(37, 99, 235, 0.25) !important;     /* Garis tepi biru transparan */
+}
+
+/* Ikon otomatis berubah menjadi biru solid saat tombol di-hover */
+.action-buttons .btn-action-kustom:hover i {
+    color: #2563EB !important; /* Warna biru korporat/profesional */
+}
+
+/* ==========================================================
+    Pagination
+========================================================== */
+/* ======================================
+   Table Footer
+====================================== */
+
+.table-footer{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:20px;
+    padding-top:18px;
+
+    border-top:1px solid #EEF2F7;
+
+}
+
+.table-info{
+
+    font-size:14px;
+    color:#64748B;
+
+}
+
+.custom-pagination{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+}
+
+.page-btn{
+
+    width:40px;
+    height:40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#F8FAFC;
+
+    color:#475569;
+
+    transition:.25s;
+
+    font-weight:600;
+
+}
+
+.page-btn:hover:not(:disabled){
+
+    background:#2563EB;
+    color:#fff;
+
+}
+
+.page-btn.active{
+
+    background:#2563EB;
+    color:#fff;
+
+}
+
+.page-btn:disabled{
+
+    opacity:.45;
+    cursor:not-allowed;
+
+}
+
+/* ===================================
+   Delete Modal
+=================================== */
+
+.delete-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.45);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:9999;
+
+}
+
+.delete-overlay.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+.delete-card{
+
+    width:430px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.15);
+
+    animation:popup .3s;
+
+}
+
+.delete-icon{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#FEF2F2;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.delete-icon i{
+
+    font-size:42px;
+
+    color:#DC2626;
+
+}
+
+.delete-card h3{
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+.delete-card p{
+
+    color:#475569;
+
+    margin-bottom:8px;
+
+}
+
+.delete-card small{
+
+    color:#94A3B8;
+
+}
+
+.delete-action{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:28px;
+
+}
+
+.delete-action .btn{
+
+    min-width:120px;
+
+    border-radius:10px;
+
+}
+
+/* ===================================
+    Summary Cards
+=================================== */
+.summary-card{
+    background:#fff;
+    border:1px solid #E2E8F0;
+    border-radius:18px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    transition:.3s;
+    height:100%;
+}
+
+.summary-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.summary-icon{
+    width:50px;
+    height:50px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+}
+
+.icon-green{
+    background:rgba(34,197,94,.12);
+    color:#16A34A;
+}
+
+.summary-card small{
+    color:#64748B;
+    display:block;
+}
+
+.summary-card h3{
+    margin:0;
+    font-size:30px;
+    font-weight:600;
+}
+
+.project-table tbody td i{
+
+    color:#94A3B8;
+
+}
+
+.project-table tbody h5{
+
+    font-weight:600;
+
+    color:#1E293B;
+
+}
+
+.project-table tbody p{
+
+    color:#94A3B8;
+
+}
