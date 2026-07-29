@@ -37,3 +37,7 @@ async function rejectQuotation(id) {
 async function previewQuotation(id) {
     return apiRequest(`/quotations/${id}/preview`);
 }
+
+async function addQuotationFollowUp(id, payload) {
+    return apiRequest(`/quotations/${id}/follow-ups`, { method: "POST", body: payload });
+}

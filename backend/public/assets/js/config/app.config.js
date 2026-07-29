@@ -39,6 +39,14 @@ const MESConfig = {
         { key: "qc", label: "Quality Control", button: "QC Passed", progress: 100 }
     ],
 
+    followUpStatuses: [
+        { key: "waiting_response", label: "Menunggu Respon" },
+        { key: "negotiating", label: "Sedang Negosiasi" },
+        { key: "revision", label: "Revisi Quotation" },
+        { key: "approved", label: "Disetujui" },
+        { key: "rejected", label: "Ditolak" }
+    ],
+
     quotationStatuses: ["draft", "sent", "approved", "rejected"],
     soStatuses: ["waiting_ppic", "ppic_processing", "released", "in_production", "qc_passed", "ready_for_delivery", "completed"],
     notificationTypes: [

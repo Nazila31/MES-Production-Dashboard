@@ -29,6 +29,16 @@ php artisan serve
 
 Open: http://127.0.0.1:8000/login.html
 
+### File uploads (`/storage/...`)
+
+Uploaded files are stored in `storage/app/public/` and served at `/storage/{path}`.
+
+- Run `php artisan storage:link` once (creates `public/storage` symlink), **or** rely on the built-in Laravel route fallback in `routes/web.php`.
+- Laragon/Apache document root must point to **`backend/public`**.
+- Set `APP_URL` in `.env` to the exact URL you use in the browser (e.g. `http://127.0.0.1:8000`).
+
+Supported upload types: PDF, JPG, JPEG, PNG (max 10 MB).
+
 ## Demo Users (password: `password`)
 
 | Role | Email |

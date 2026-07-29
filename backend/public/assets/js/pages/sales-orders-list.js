@@ -60,7 +60,7 @@ function renderSalesOrders(data) {
     if (!tbody) return;
 
     if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5">
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-5">
             <i class="bi bi-cart-x display-5 text-secondary"></i>
             <h5 class="mt-3">No Sales Orders Found</h5>
             <p class="text-muted mb-0">Convert an approved quotation to create a Sales Order.</p>
@@ -80,7 +80,8 @@ function renderSalesOrders(data) {
                 <td>${item.spk_global}</td>
                 <td width="180"><div class="progress"><div class="progress-bar ${styles.progress}" style="width:${progress}%">${progress}%</div></div></td>
                 <td><span class="badge-kustom ${styles.badge}">${formatStatusLabel(item.production_stage || item.status)}</span></td>
-                <td>${formatDate(item.deadline)}</td>
+                <td>${renderDeadlineCell(item.material_deadline, item.material_deadline_status)}</td>
+                <td>${renderDeadlineCell(item.production_deadline || item.deadline, item.production_deadline_status)}</td>
                 <td><div class="action-buttons">
                     <a href="${base}pages/sales-orders/detail.html?id=${item.id}" class="btn btn-action-kustom" title="View"><i class="bi bi-eye"></i></a>
                 </div></td>
@@ -136,11 +137,17 @@ async function generateSO() {
     }
 
     try {
-        await createSO({
-            quotation_id: Number(quotationId),
-            so_number: soNumber,
-            spk_global: spkGlobal,
-        });
+        const formData = new FormData();
+        formData.append("quotation_id", quotationId);
+        formData.append("so_number", soNumber);
+        formData.append("spk_global", spkGlobal);
+
+        const soFile = document.getElementById("soFileInput")?.files?.[0];
+        const spkFile = document.getElementById("spkFileInput")?.files?.[0];
+        if (soFile) formData.append("file", soFile);
+        if (spkFile) formData.append("spk_file", spkFile);
+
+        await createSO(formData);
         closeCreateSOModal();
         await loadSalesOrders();
         document.getElementById("successModal")?.classList.add("show");

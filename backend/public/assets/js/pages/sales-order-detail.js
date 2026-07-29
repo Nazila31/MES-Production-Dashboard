@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (id) {
         await loadSalesOrderDetail(id);
         bindDeliveryNoteForm(id);
+        bindDeadlineForm(id);
     }
 });
 
@@ -23,8 +24,11 @@ async function loadSalesOrderDetail(id) {
         setText("machine", data.machine);
         setText("pic", data.pic);
         setText("startDate", formatDate(data.start_date));
-        setText("deadline", formatDate(data.deadline));
+        setDeadlineField("materialDeadline", data.material_deadline, data.material_deadline_status);
+        setDeadlineField("productionDeadline", data.production_deadline || data.deadline, data.production_deadline_status);
         setText("description", data.description);
+
+        toggleDeadlineEditForm(data);
 
         const badge = document.getElementById("statusBadge");
         if (badge) {
@@ -46,6 +50,51 @@ async function loadSalesOrderDetail(id) {
     } catch (error) {
         alert(error.message);
     }
+}
+
+function setDeadlineField(id, date, status) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = renderDeadlineCell(date, status);
+}
+
+function toggleDeadlineEditForm(data) {
+    const section = document.getElementById("deadlineEditSection");
+    const user = getAuthUser();
+    if (!section || !user) return;
+
+    const canEdit = user.role === "admin" || user.role === "ppic";
+    section.style.display = canEdit ? "block" : "none";
+
+    if (canEdit) {
+        setValue("material_deadline", data.material_deadline);
+        setValue("deadline", data.production_deadline || data.deadline);
+    }
+}
+
+function setValue(name, value) {
+    const field = document.querySelector(`#deadlineForm [name="${name}"]`);
+    if (field) field.value = value || "";
+}
+
+function bindDeadlineForm(id) {
+    const form = document.getElementById("deadlineForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        try {
+            await updateSalesOrderDeadlines(id, {
+                material_deadline: formData.get("material_deadline") || null,
+                deadline: formData.get("deadline") || null,
+            });
+            await loadSalesOrderDetail(id);
+        } catch (error) {
+            alert(error.message);
+        }
+    });
 }
 
 function renderTimeline(data) {

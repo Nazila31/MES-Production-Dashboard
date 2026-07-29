@@ -405,3 +405,38 @@ Section Header
 .report-docs-empty{
     text-align:center;
 }
+
+.report-doc-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.report-doc-list li{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid #E5E7EB;
+}
+
+.report-doc-list li:last-child{
+    border-bottom:none;
+}
+
+.report-doc-inline-actions{
+    display:flex;
+    gap:6px;
+    margin-left:auto;
+}
+
+.report-docs-toggle{
+    border-radius:8px;
+    font-weight:500;
+}
+
+.report-reject-history h6{
+    font-weight:600;
+    margin-bottom:10px;
+}

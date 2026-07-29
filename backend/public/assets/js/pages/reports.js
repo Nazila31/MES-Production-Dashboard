@@ -49,7 +49,7 @@ function renderReportTable(rows) {
     if (!tbody) return;
 
     if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="11" class="text-center py-4 text-muted">No report data available.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="text-center py-4 text-muted">No report data available.</td></tr>`;
         return;
     }
 
@@ -57,29 +57,35 @@ function renderReportTable(rows) {
         const docs = row.documents || [];
         const statusClass = getStatusStyles(row.status).badge;
         const statusLabel = row.status_label || formatStatusLabel(row.status);
+        const fileLabel = docs.length === 1 ? "1 File" : `${docs.length} Files`;
 
         return `
             <tr class="report-row" data-row-index="${index}">
-                <td><button class="btn btn-sm btn-link p-0 report-expand-btn" data-target="report-docs-${index}" aria-label="Toggle documents"><i class="bi bi-chevron-right"></i></button></td>
+                <td><button class="btn btn-sm btn-link p-0 report-expand-btn" data-target="report-docs-${index}" aria-label="Toggle details"><i class="bi bi-chevron-right"></i></button></td>
                 <td>${row.quotation_date || "-"}</td>
                 <td>${row.so_date || "-"}</td>
-                <td><strong>${row.so_number || "-"}</strong><br><small class="text-muted">${row.quotation_number || ""}</small></td>
+                <td><strong>${row.so_number || "-"}</strong></td>
                 <td>${row.client || "-"}</td>
-                <td>${row.deadline_date || "-"}</td>
+                <td>${renderDeadlineCell(row.material_deadline, row.material_deadline_status)}</td>
+                <td>${renderDeadlineCell(row.production_deadline, row.production_deadline_status)}</td>
                 <td>${row.production_start || "-"}</td>
                 <td>${row.completion_date || "-"}</td>
                 <td>${row.total_days != null ? `${row.total_days} hari` : "-"}</td>
                 <td><span class="badge-kustom ${statusClass}">${statusLabel}</span></td>
-                <td><span class="badge bg-light text-dark">${docs.length} file</span></td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-light report-docs-toggle" data-target="report-docs-${index}" ${docs.length ? "" : "disabled"}>
+                        ${docs.length ? `<i class="bi bi-chevron-down"></i> ${fileLabel}` : "0 Files"}
+                    </button>
+                </td>
             </tr>
             <tr class="report-docs-row d-none" id="report-docs-${index}">
-                <td colspan="11">
+                <td colspan="12">
                     ${renderDocumentPanel(docs, row)}
                 </td>
             </tr>`;
     }).join("");
 
-    tbody.querySelectorAll(".report-expand-btn").forEach((btn) => {
+    tbody.querySelectorAll(".report-expand-btn, .report-docs-toggle").forEach((btn) => {
         btn.addEventListener("click", () => toggleDocumentRow(btn));
     });
 
@@ -89,19 +95,57 @@ function renderReportTable(rows) {
 }
 
 function renderDocumentPanel(documents, row) {
-    if (!documents.length) {
+    const rejectLogs = row.qc_reject_logs || [];
+    let html = "";
+
+    if (!documents.length && !rejectLogs.length) {
         return `<div class="report-docs-empty text-muted py-3"><i class="bi bi-file-earmark-x"></i> No documents uploaded for ${row.so_number}.</div>`;
     }
 
-    return `
-        <div class="report-docs-panel">
-            <div class="report-docs-meta mb-2">
-                <strong>${row.so_number}</strong> — SPK: ${row.spk_global || "-"}
-            </div>
-            <div class="report-docs-grid">
-                ${documents.map((doc) => renderDocumentCard(doc)).join("")}
-            </div>
-        </div>`;
+    if (documents.length) {
+        html += `
+            <div class="report-docs-panel">
+                <div class="report-docs-meta mb-2">
+                    <strong>${row.so_number}</strong> — SPK: ${row.spk_global || "-"}
+                </div>
+                <ul class="report-doc-list mb-3">
+                    ${documents.map((doc) => `
+                        <li>
+                            <i class="bi ${doc.is_image ? "bi-image" : "bi-file-earmark-pdf"}"></i>
+                            <span>${doc.label}: ${doc.file_name}</span>
+                            <div class="report-doc-inline-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                    data-doc-view="1"
+                                    data-url="${doc.url}"
+                                    data-name="${doc.file_name}"
+                                    data-label="${doc.label}"
+                                    data-image="${doc.is_image ? "1" : "0"}">
+                                    View
+                                </button>
+                                <a href="${doc.download_url || getDownloadUrl(doc.url)}" class="btn btn-sm btn-outline-secondary">Download</a>
+                            </div>
+                        </li>`).join("")}
+                </ul>
+                <div class="report-docs-grid">
+                    ${documents.map((doc) => renderDocumentCard(doc)).join("")}
+                </div>
+            </div>`;
+    }
+
+    if (rejectLogs.length) {
+        html += `
+            <div class="report-reject-history mt-3">
+                <h6>QC Reject History</h6>
+                ${rejectLogs.map((log) => `
+                    <div class="border rounded p-2 mb-2">
+                        <strong>Return to ${formatStatusLabel(log.return_to_stage)}</strong>
+                        <p class="mb-1 mt-1">${log.reject_reason}</p>
+                        <small class="text-muted">${log.rejected_by || "Unknown"} — ${log.created_at || "-"}</small>
+                    </div>`).join("")}
+            </div>`;
+    }
+
+    return html;
 }
 
 function renderDocumentCard(doc) {
@@ -124,7 +168,7 @@ function renderDocumentCard(doc) {
                         data-image="${doc.is_image ? "1" : "0"}">
                         <i class="bi bi-eye"></i> View
                     </button>
-                    <a href="${doc.url}" class="btn btn-sm btn-outline-secondary" download="${doc.file_name}">
+                    <a href="${doc.download_url || getDownloadUrl(doc.url)}" class="btn btn-sm btn-outline-secondary" download="${doc.file_name}">
                         <i class="bi bi-download"></i> Download
                     </a>
                 </div>
@@ -139,8 +183,13 @@ function toggleDocumentRow(button) {
 
     const isHidden = docsRow.classList.contains("d-none");
     docsRow.classList.toggle("d-none", !isHidden);
-    button.querySelector("i")?.classList.toggle("bi-chevron-right", !isHidden);
-    button.querySelector("i")?.classList.toggle("bi-chevron-down", isHidden);
+
+    document.querySelectorAll(`[data-target="${targetId}"]`).forEach((el) => {
+        const icon = el.querySelector("i");
+        if (!icon) return;
+        icon.classList.toggle("bi-chevron-right", !isHidden);
+        icon.classList.toggle("bi-chevron-down", isHidden);
+    });
 }
 
 function openDocumentPreview(dataset) {
@@ -154,7 +203,7 @@ function openDocumentPreview(dataset) {
     }
 
     title.textContent = `${dataset.label} — ${dataset.name}`;
-    download.href = dataset.url;
+    download.href = getDownloadUrl(dataset.url);
     download.setAttribute("download", dataset.name);
 
     if (dataset.image === "1") {

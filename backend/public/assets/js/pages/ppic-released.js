@@ -22,7 +22,7 @@ function renderReleasedSO(data) {
     if (!tbody) return;
 
     if (!data.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5">
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5">
             <p class="text-muted mb-0">No released Sales Orders for PPIC.</p></td></tr>`;
         return;
     }
@@ -35,7 +35,8 @@ function renderReleasedSO(data) {
                 <td>${item.client}</td>
                 <td>${item.machine}</td>
                 <td><span class="badge-kustom ${styles.badge}">${formatStatusLabel(item.status)}</span></td>
-                <td>${formatDate(item.deadline)}</td>
+                <td>${renderDeadlineCell(item.material_deadline, item.material_deadline_status)}</td>
+                <td>${renderDeadlineCell(item.production_deadline || item.deadline, item.production_deadline_status)}</td>
                 <td><div class="action-buttons">
                     <a href="${base}pages/ppic/bom.html?so_id=${item.id}" class="btn btn-action-kustom" title="BOM"><i class="bi bi-list-check"></i></a>
                     <a href="${base}pages/ppic/warehouse.html?so_id=${item.id}" class="btn btn-action-kustom" title="Stock"><i class="bi bi-box-seam"></i></a>

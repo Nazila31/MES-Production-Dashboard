@@ -38,7 +38,11 @@ class PpicController extends Controller
                 'client' => $so->client,
                 'machine' => $so->machine,
                 'status' => $so->status->value,
+                'material_deadline' => optional($so->material_deadline)?->format('Y-m-d'),
+                'production_deadline' => optional($so->deadline)?->format('Y-m-d'),
                 'deadline' => optional($so->deadline)?->format('Y-m-d'),
+                'material_deadline_status' => $so->materialDeadlineStatus(),
+                'production_deadline_status' => $so->productionDeadlineStatus(),
             ]);
 
         return response()->json(['data' => $data]);
@@ -167,10 +171,6 @@ class PpicController extends Controller
 
     public function releaseWorkOrder(Request $request, SalesOrder $salesOrder): JsonResponse
     {
-        $data = $request->validate([
-            'schedule_date' => ['required', 'date'],
-        ]);
-
         $workOrder = $salesOrder->workOrder;
 
         if (! $workOrder) {
@@ -181,9 +181,11 @@ class PpicController extends Controller
             return response()->json(['message' => 'Work Order already released.'], 422);
         }
 
+        $releaseDate = now()->toDateString();
+
         $workOrder->update([
             'status' => 'released',
-            'schedule_date' => $data['schedule_date'],
+            'schedule_date' => $releaseDate,
             'released_at' => now(),
         ]);
 
@@ -235,6 +237,7 @@ class PpicController extends Controller
                 'client' => $wo->salesOrder?->client,
                 'wo_number' => $wo->wo_number,
                 'schedule_date' => optional($wo->schedule_date)?->format('Y-m-d'),
+                'release_date' => optional($wo->released_at)?->format('Y-m-d'),
                 'status' => $wo->status,
                 'released_at' => $wo->released_at?->toIso8601String(),
             ]);

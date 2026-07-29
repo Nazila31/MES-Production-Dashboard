@@ -29,11 +29,16 @@ class MesWorkflowTest extends TestCase
             'pic' => 'John',
             'machine' => 'Test Machine',
             'amount' => 1000000,
-            'deadline' => now()->addMonth()->toDateString(),
             'description' => 'Test quotation',
         ]);
         $createResponse->assertCreated();
         $quotationId = $createResponse->json('data.id');
+
+        $this->postJson("/api/v1/quotations/{$quotationId}/follow-ups", [
+            'follow_up_date' => now()->toDateString(),
+            'description' => 'Initial client discussion',
+            'status' => 'waiting_response',
+        ])->assertCreated();
 
         $this->postJson("/api/v1/quotations/{$quotationId}/approve")->assertOk();
 
@@ -46,6 +51,11 @@ class MesWorkflowTest extends TestCase
         $soResponse->assertCreated();
         $soId = $soResponse->json('data.id');
 
+        $this->patchJson("/api/v1/sales-orders/{$soId}/deadlines", [
+            'material_deadline' => now()->addWeek()->toDateString(),
+            'deadline' => now()->addMonth()->toDateString(),
+        ])->assertOk();
+
         Sanctum::actingAs($ppic);
         $this->postJson("/api/v1/ppic/bom/{$soId}", [
             'items' => [['material_code' => 'MAT-001', 'material_name' => 'Steel', 'qty' => 2, 'unit' => 'pcs']],
@@ -56,7 +66,7 @@ class MesWorkflowTest extends TestCase
             'wo_number' => 'WO260727001',
         ])->assertCreated();
         $this->postJson("/api/v1/ppic/work-orders/{$soId}/release", [
-            'schedule_date' => now()->addDay()->toDateString(),
+            'schedule_date' => now()->toDateString(),
         ])->assertOk();
 
         Sanctum::actingAs($production);
@@ -119,7 +129,7 @@ class MesWorkflowTest extends TestCase
             'items' => [['material_code' => 'MAT-002', 'material_name' => 'Alu', 'qty' => 1, 'unit' => 'pcs']],
         ])->assertOk();
         $this->postJson('/api/v1/ppic/work-orders', ['so_id' => $soId, 'wo_number' => 'WO260727010'])->assertCreated();
-        $this->postJson("/api/v1/ppic/work-orders/{$soId}/release", ['schedule_date' => now()->toDateString()])->assertOk();
+        $this->postJson("/api/v1/ppic/work-orders/{$soId}/release")->assertOk();
 
         Sanctum::actingAs($production);
         foreach (['fabrication', 'machining', 'assembly'] as $stage) {

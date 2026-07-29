@@ -9,14 +9,14 @@ use App\Models\SalesOrder;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Support\MesStorageUrl;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = SalesOrder::query()->with(['quotation', 'workOrder', 'bomItems', 'stageLogs']);
+        $query = SalesOrder::query()->with(['quotation', 'workOrder', 'bomItems', 'stageLogs', 'qcRejectLogs.rejector']);
 
         if ($from = $request->date('date_from')) {
             $query->whereDate('created_at', '>=', $from);
@@ -92,7 +92,7 @@ class ReportController extends Controller
 
         $headers = [
             'Quotation Date', 'Quotation Number', 'SO Date', 'SO Number', 'SPK Global', 'Client',
-            'Deadline Date', 'Production Start', 'Completion Date', 'Total Hari', 'Status',
+            'Material Deadline', 'Production Deadline', 'Production Start', 'Completion Date', 'Total Hari', 'Status',
             'Documents',
         ];
 
@@ -112,7 +112,8 @@ class ReportController extends Controller
                     $row['so_number'],
                     $row['spk_global'],
                     $row['client'],
-                    $row['deadline_date'],
+                    $row['material_deadline'],
+                    $row['production_deadline'],
                     $row['production_start'],
                     $row['completion_date'],
                     $row['total_days'] ?? '-',
@@ -150,13 +151,22 @@ class ReportController extends Controller
             'so_number' => $so->so_number,
             'spk_global' => $so->spk_global,
             'client' => $so->client,
-            'deadline_date' => $so->deadline?->format('Y-m-d') ?? '-',
+            'material_deadline' => $so->material_deadline?->format('Y-m-d') ?? '-',
+            'production_deadline' => $so->deadline?->format('Y-m-d') ?? '-',
+            'material_deadline_status' => $so->materialDeadlineStatus(),
+            'production_deadline_status' => $so->productionDeadlineStatus(),
             'production_start' => $so->production_started_at?->format('Y-m-d H:i') ?? '-',
             'completion_date' => $so->completed_at?->format('Y-m-d H:i') ?? '-',
             'total_days' => $totalDays,
             'status' => $so->status->value,
             'status_label' => $this->statusLabel($so->status),
             'documents' => $this->collectDocuments($so),
+            'qc_reject_logs' => $so->qcRejectLogs->map(fn ($log) => [
+                'reject_reason' => $log->reject_reason,
+                'return_to_stage' => $log->return_to_stage->value,
+                'rejected_by' => $log->rejector?->name,
+                'created_at' => $log->created_at?->format('Y-m-d H:i'),
+            ])->values()->all(),
         ];
     }
 
@@ -186,6 +196,17 @@ class ReportController extends Controller
         );
         if ($salesOrderDoc) {
             $documents[] = $salesOrderDoc;
+        }
+
+        $spkDoc = $this->documentMeta(
+            $so->spk_file_path,
+            $so->spk_file_name,
+            $so->spk_file_mime,
+            'spk',
+            'SPK',
+        );
+        if ($spkDoc) {
+            $documents[] = $spkDoc;
         }
 
         $bomItem = $so->bomItems->first(fn ($item) => ! empty($item->file_path));
@@ -258,7 +279,8 @@ class ReportController extends Controller
             'category' => $category,
             'label' => $label,
             'file_name' => $name ?: basename($path),
-            'url' => Storage::disk('public')->url($path),
+            'url' => MesStorageUrl::url($path),
+            'download_url' => MesStorageUrl::downloadUrl($path),
             'mime' => $mime,
             'is_image' => $isImage,
         ];

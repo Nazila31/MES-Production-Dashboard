@@ -53,12 +53,79 @@ function renderSidebar(activePage) {
 function updateProfileInfo(user) {
     if (!user) return;
 
+    const roleLabel = user.role_label || capitalize(user.role);
+    const identityText = `${roleLabel} | ${user.name}`;
+
+    document.querySelectorAll("#userIdentity").forEach((el) => {
+        el.textContent = identityText;
+    });
+
     document.querySelectorAll(".profile-info strong").forEach((el) => {
         el.textContent = user.name;
     });
 
     document.querySelectorAll(".profile-info small, .profile-header small").forEach((el) => {
-        el.textContent = user.role_label || capitalize(user.role);
+        el.textContent = roleLabel;
+    });
+}
+
+function ensureProfileControls() {
+    const navbar = document.querySelector(".top-navbar");
+    if (!navbar) return;
+
+    let navbarRight = navbar.querySelector(".navbar-right");
+    if (!navbarRight) {
+        navbarRight = document.createElement("div");
+        navbarRight.className = "navbar-right";
+        navbar.appendChild(navbarRight);
+    }
+
+    navbarRight.querySelector(".profile-wrapper")?.remove();
+
+    const base = getBasePath();
+    navbarRight.insertAdjacentHTML("beforeend", `
+        <div class="profile-wrapper">
+            <div class="user-identity" id="userIdentity">-</div>
+            <button class="profile-icon-btn" id="profileToggle" type="button" title="Account">
+                <i class="bi bi-person-circle"></i>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" id="logoutLink"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+            </div>
+        </div>
+    `);
+
+    bindProfileDropdown();
+    updateProfileInfo(getAuthUser());
+}
+
+function bindProfileDropdown() {
+    const profileToggle = document.getElementById("profileToggle");
+    const profileDropdown = document.getElementById("profileDropdown");
+    const logoutLink = document.getElementById("logoutLink");
+    const notificationDropdown = document.getElementById("notificationDropdown");
+
+    if (!profileToggle || profileToggle.dataset.bound === "true") {
+        return;
+    }
+
+    profileToggle.dataset.bound = "true";
+
+    profileToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        notificationDropdown?.classList.remove("show");
+        profileDropdown?.classList.toggle("show");
+        profileToggle.classList.toggle("active");
+    });
+
+    profileDropdown?.addEventListener("click", (event) => {
+        event.stopPropagation();
+    });
+
+    logoutLink?.addEventListener("click", async (event) => {
+        event.preventDefault();
+        await logoutUser();
+        window.location.href = `${getBasePath()}login.html`;
     });
 }
 
@@ -160,6 +227,7 @@ function initLayout() {
     }
 
     ensureNavbarControls();
+    ensureProfileControls();
     renderSidebar(activePage);
     refreshNotificationBadge();
 

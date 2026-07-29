@@ -46,5 +46,9 @@ async function previewSalesOrder(id) {
 }
 
 async function previewDelivery(id) {
-    return apiRequest(`/sales-orders/${id}/delivery-preview`);
+    return apiRequest(`/sales-orders/${id}/delivery-note-preview`);
+}
+
+async function updateSalesOrderDeadlines(id, payload) {
+    return apiRequest(`/sales-orders/${id}/deadlines`, { method: "PATCH", body: payload });
 }

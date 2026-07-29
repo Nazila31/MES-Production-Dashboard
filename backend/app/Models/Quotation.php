@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\QuotationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Quotation extends Model
@@ -17,7 +18,6 @@ class Quotation extends Model
         'amount',
         'status',
         'description',
-        'deadline',
         'file_path',
         'file_name',
         'file_mime',
@@ -31,7 +31,6 @@ class Quotation extends Model
         return [
             'status' => QuotationStatus::class,
             'amount' => 'decimal:2',
-            'deadline' => 'date',
             'approved_at' => 'datetime',
         ];
     }
@@ -49,5 +48,10 @@ class Quotation extends Model
     public function salesOrder(): HasOne
     {
         return $this->hasOne(SalesOrder::class);
+    }
+
+    public function followUps(): HasMany
+    {
+        return $this->hasMany(QuotationFollowUp::class)->latest('follow_up_date');
     }
 }

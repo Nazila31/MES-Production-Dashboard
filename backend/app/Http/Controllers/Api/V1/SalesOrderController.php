@@ -11,6 +11,7 @@ use App\Models\SalesOrder;
 use App\Services\ActivityLogService;
 use App\Services\MesNotificationService;
 use App\Support\MesFileRules;
+use App\Support\MesStorageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -64,6 +65,7 @@ class SalesOrderController extends Controller
             'so_number' => ['required', 'string', 'max:50', 'unique:sales_orders,so_number'],
             'spk_global' => ['required', 'string', 'max:50', 'unique:sales_orders,spk_global'],
             'file' => MesFileRules::document(),
+            'spk_file' => MesFileRules::document(),
         ]);
 
         $quotation = Quotation::query()->findOrFail($data['quotation_id']);
@@ -77,7 +79,8 @@ class SalesOrderController extends Controller
         }
 
         $soNumber = $data['so_number'];
-        $fileMeta = $this->storeFile($request);
+        $fileMeta = $this->storeUploadedFile($request, 'file', 'sales-orders');
+        $spkFileMeta = $this->storeUploadedFile($request, 'spk_file', 'spk', 'spk_');
 
         $salesOrder = SalesOrder::create([
             'so_number' => $soNumber,
@@ -89,10 +92,10 @@ class SalesOrderController extends Controller
             'status' => SalesOrderStatus::WaitingPpic,
             'progress' => 0,
             'start_date' => now()->toDateString(),
-            'deadline' => $quotation->deadline,
             'description' => $quotation->description,
             'created_by' => $request->user()->id,
             ...$fileMeta,
+            ...$spkFileMeta,
         ]);
 
         $this->notifications->notifyPpic(
@@ -113,6 +116,31 @@ class SalesOrderController extends Controller
             'data' => $this->transform($salesOrder),
             'message' => 'Sales Order created successfully.',
         ], 201);
+    }
+
+    public function updateDeadlines(Request $request, SalesOrder $salesOrder): JsonResponse
+    {
+        $data = $request->validate([
+            'material_deadline' => ['nullable', 'date'],
+            'deadline' => ['nullable', 'date'],
+        ]);
+
+        $salesOrder->update([
+            'material_deadline' => $data['material_deadline'] ?? null,
+            'deadline' => $data['deadline'] ?? null,
+        ]);
+
+        $this->activities->log(
+            "Deadlines updated for {$salesOrder->so_number}.",
+            'admin',
+            $request->user(),
+            $salesOrder,
+        );
+
+        return response()->json([
+            'data' => $this->transform($salesOrder->fresh()),
+            'message' => 'Deadlines updated successfully.',
+        ]);
     }
 
     public function createDeliveryNote(Request $request, SalesOrder $salesOrder): JsonResponse
@@ -175,9 +203,24 @@ class SalesOrderController extends Controller
 
         return response()->json([
             'data' => [
-                'url' => Storage::disk('public')->url($salesOrder->file_path),
+                'url' => MesStorageUrl::url($salesOrder->file_path),
                 'file_name' => $salesOrder->file_name,
                 'mime' => $salesOrder->file_mime,
+            ],
+        ]);
+    }
+
+    public function spkPreview(SalesOrder $salesOrder): JsonResponse
+    {
+        if (! $salesOrder->spk_file_path) {
+            return response()->json(['message' => 'No SPK document uploaded.'], 404);
+        }
+
+        return response()->json([
+            'data' => [
+                'url' => MesStorageUrl::url($salesOrder->spk_file_path),
+                'file_name' => $salesOrder->spk_file_name,
+                'mime' => $salesOrder->spk_file_mime,
             ],
         ]);
     }
@@ -190,7 +233,7 @@ class SalesOrderController extends Controller
 
         return response()->json([
             'data' => [
-                'url' => Storage::disk('public')->url($salesOrder->delivery_file_path),
+                'url' => MesStorageUrl::url($salesOrder->delivery_file_path),
                 'file_name' => basename($salesOrder->delivery_file_path),
             ],
         ]);
@@ -204,25 +247,25 @@ class SalesOrderController extends Controller
 
         return response()->json([
             'data' => [
-                'url' => Storage::disk('public')->url($salesOrder->shipment_proof_file_path),
+                'url' => MesStorageUrl::url($salesOrder->shipment_proof_file_path),
                 'file_name' => basename($salesOrder->shipment_proof_file_path),
             ],
         ]);
     }
 
-    private function storeFile(Request $request): array
+    private function storeUploadedFile(Request $request, string $field, string $folder, string $prefix = ''): array
     {
-        if (! $request->hasFile('file')) {
+        if (! $request->hasFile($field)) {
             return [];
         }
 
-        $file = $request->file('file');
-        $path = $file->store('sales-orders', 'public');
+        $file = $request->file($field);
+        $path = $file->store($folder, 'public');
 
         return [
-            'file_path' => $path,
-            'file_name' => $file->getClientOriginalName(),
-            'file_mime' => $file->getClientMimeType(),
+            $prefix.'file_path' => $path,
+            $prefix.'file_name' => $file->getClientOriginalName(),
+            $prefix.'file_mime' => $file->getClientMimeType(),
         ];
     }
 
@@ -241,7 +284,11 @@ class SalesOrderController extends Controller
             'production_stage' => $salesOrder->production_stage?->value,
             'progress' => $salesOrder->progress,
             'start_date' => optional($salesOrder->start_date)?->format('Y-m-d'),
+            'material_deadline' => optional($salesOrder->material_deadline)?->format('Y-m-d'),
             'deadline' => optional($salesOrder->deadline)?->format('Y-m-d'),
+            'production_deadline' => optional($salesOrder->deadline)?->format('Y-m-d'),
+            'material_deadline_status' => $salesOrder->materialDeadlineStatus(),
+            'production_deadline_status' => $salesOrder->productionDeadlineStatus(),
             'description' => $salesOrder->description,
             'delivery_order' => $salesOrder->delivery_order,
             'packing_list' => $salesOrder->packing_list,
@@ -255,9 +302,11 @@ class SalesOrderController extends Controller
             'tracking_number' => $salesOrder->tracking_number,
             'shipment_date' => optional($salesOrder->shipment_date)?->format('Y-m-d'),
             'shipment_notes' => $salesOrder->shipment_notes,
-            'file_url' => $salesOrder->file_path ? Storage::disk('public')->url($salesOrder->file_path) : null,
-            'delivery_file_url' => $salesOrder->delivery_file_path ? Storage::disk('public')->url($salesOrder->delivery_file_path) : null,
-            'shipment_proof_url' => $salesOrder->shipment_proof_file_path ? Storage::disk('public')->url($salesOrder->shipment_proof_file_path) : null,
+            'file_url' => MesStorageUrl::url($salesOrder->file_path),
+            'spk_file_url' => MesStorageUrl::url($salesOrder->spk_file_path),
+            'has_spk_file' => (bool) $salesOrder->spk_file_path,
+            'delivery_file_url' => MesStorageUrl::url($salesOrder->delivery_file_path),
+            'shipment_proof_url' => MesStorageUrl::url($salesOrder->shipment_proof_file_path),
             'is_delayed' => $salesOrder->isDelayed(),
         ];
 

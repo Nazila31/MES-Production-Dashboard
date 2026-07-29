@@ -2,6 +2,46 @@
     FORMAT UTILITIES
 ========================================================== */
 
+function getDownloadUrl(url) {
+    if (!url) return "#";
+    return url.includes("?") ? `${url}&download=1` : `${url}?download=1`;
+}
+
+function openFileUrl(url, download = false) {
+    if (!url) return;
+    window.open(download ? getDownloadUrl(url) : url, "_blank");
+}
+
+function formatFollowUpStatus(status) {
+    if (!status) return "-";
+    const match = MESConfig.followUpStatuses.find((item) => item.key === status);
+    return match?.label || capitalize(status);
+}
+
+function getDeadlineIndicatorClass(status) {
+    return ({
+        safe: "deadline-safe",
+        approaching: "deadline-approaching",
+        overdue: "deadline-overdue",
+    })[status] || "";
+}
+
+function getDeadlineIndicatorLabel(status) {
+    return ({
+        safe: "Aman",
+        approaching: "Mendekati",
+        overdue: "Terlewati",
+    })[status] || "";
+}
+
+function renderDeadlineCell(date, status) {
+    if (!date) return "-";
+    const indicatorClass = getDeadlineIndicatorClass(status);
+    const indicatorLabel = getDeadlineIndicatorLabel(status);
+    const dot = status ? `<span class="deadline-dot ${indicatorClass}" title="${indicatorLabel}"></span>` : "";
+    return `${dot}${formatDate(date)}`;
+}
+
 function formatDate(value) {
     if (!value) {
         return "-";

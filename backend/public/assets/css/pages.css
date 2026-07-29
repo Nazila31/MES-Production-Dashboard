@@ -249,6 +249,9 @@
 ========================================================== */
 .profile-wrapper{
     position:relative;
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 .profile-button{

@@ -22,6 +22,7 @@
                 <div class="page-header">
                     <div><h2>Quotation Information</h2><p>Marketing Quotation Detail</p></div>
                     <div>
+                        <button class="btn btn-outline-primary" id="previewDocumentBtn" style="display:none;"><i class="bi bi-eye"></i> Preview Document</button>
                         <button class="btn btn-success" id="approveBtn"><i class="bi bi-check-circle"></i> Approve</button>
                         <button class="btn btn-danger" id="rejectBtn"><i class="bi bi-x-circle"></i> Reject</button>
                         <a href="edit.html" id="editBtn" class="btn btn-outline-secondary" style="display:none;"><i class="bi bi-pencil"></i> Edit</a>
@@ -37,10 +38,23 @@
                         <div class="col-md-6 detail-item"><label>Amount</label><h6 id="amount">-</h6></div>
                         <div class="col-md-6 detail-item"><label>Status</label><span class="badge-kustom" id="statusBadge">-</span></div>
                         <div class="col-md-6 detail-item"><label>Created At</label><h6 id="createdAt">-</h6></div>
-                        <div class="col-md-6 detail-item"><label>Deadline</label><h6 id="deadline">-</h6></div>
                     </div>
                 </div>
                 <div class="card-default mt-4"><h5>Description</h5><p id="description">-</p></div>
+                <div class="card-default mt-4">
+                    <h5 class="mb-3">Follow Up History</h5>
+                    <div id="followUpList"></div>
+                    <hr class="my-4">
+                    <h6 class="mb-3">Tambah Follow Up</h6>
+                    <form id="followUpForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3"><label class="form-label">Tanggal Follow Up</label><input type="date" name="follow_up_date" class="form-control" required></div>
+                            <div class="col-md-4 mb-3"><label class="form-label">Status (Opsional)</label><select name="status" class="form-select"></select></div>
+                            <div class="col-12 mb-3"><label class="form-label">Deskripsi / Catatan</label><textarea name="description" class="form-control" rows="3" required placeholder="Catatan komunikasi dengan client..."></textarea></div>
+                            <div class="col-12"><button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Simpan Follow Up</button></div>
+                        </div>
+                    </form>
+                </div>
             </main>
         </div>
     </div>

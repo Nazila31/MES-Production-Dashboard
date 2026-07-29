@@ -44,7 +44,8 @@ function renderCurrentProject(project) {
     setText("client", project.client);
     setText("machine", project.machine);
     setText("currentStage", stageConfig?.label || capitalize(stage));
-    setText("deadline", formatDate(project.deadline));
+    setDeadlineField("materialDeadline", project.material_deadline, project.material_deadline_status);
+    setDeadlineField("productionDeadline", project.production_deadline || project.deadline, project.production_deadline_status);
 
     const badge = document.getElementById("stageBadge");
     if (badge) {
@@ -132,13 +133,16 @@ async function submitRejectQc() {
     const notes = document.getElementById("rejectNotes")?.value?.trim();
     const returnStage = document.getElementById("rejectReturnStage")?.value;
     if (!notes || !returnStage || !currentProject) {
-        alert("Please enter rejection reason and select return stage.");
+        alert("Alasan reject dan proses tujuan wajib diisi.");
         return;
     }
 
     try {
         await rejectQC(currentProject.id, notes, returnStage);
         closeRejectModal();
+        document.getElementById("rejectNotes").value = "";
+        document.getElementById("rejectReturnStage").value = "";
+        await loadOperatorDashboard();
         document.getElementById("successModal")?.classList.add("show");
     } catch (error) {
         alert(error.message);
@@ -152,4 +156,10 @@ function reloadProductionPage() {
 function setText(id, value) {
     const el = document.getElementById(id);
     if (el) el.textContent = value || "-";
+}
+
+function setDeadlineField(id, date, status) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = renderDeadlineCell(date, status);
 }

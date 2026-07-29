@@ -64,7 +64,7 @@ function renderQuotations(data) {
             <td>${item.machine || "-"}</td>
             <td>${formatCurrency(item.amount)}</td>
             <td><span class="badge-kustom ${styles.badge}">${formatStatusLabel(item.status)}</span></td>
-            <td>${formatDate(item.deadline)}</td>
+            <td>${item.follow_up_count || 0}</td>
             <td><div class="action-buttons">
                 <button class="btn btn-action-kustom" title="Preview" onclick="previewDocument(${item.id})"><i class="bi bi-eye"></i></button>
                 <a href="${base}pages/quotations/detail.html?id=${item.id}" class="btn btn-action-kustom" title="View"><i class="bi bi-card-text"></i></a>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProductionStage;
 use App\Enums\SalesOrderStatus;
+use App\Support\DeadlineIndicator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,11 +23,15 @@ class SalesOrder extends Model
         'production_stage',
         'progress',
         'start_date',
+        'material_deadline',
         'deadline',
         'description',
         'file_path',
         'file_name',
         'file_mime',
+        'spk_file_path',
+        'spk_file_name',
+        'spk_file_mime',
         'delivery_order',
         'packing_list',
         'invoice',
@@ -53,6 +58,7 @@ class SalesOrder extends Model
             'status' => SalesOrderStatus::class,
             'production_stage' => ProductionStage::class,
             'start_date' => 'date',
+            'material_deadline' => 'date',
             'deadline' => 'date',
             'delivery_date' => 'date',
             'shipment_date' => 'date',
@@ -95,10 +101,22 @@ class SalesOrder extends Model
 
     public function isDelayed(): bool
     {
-        if (! $this->deadline || $this->status === SalesOrderStatus::Completed) {
-            return false;
-        }
+        return $this->productionDeadlineStatus() === 'overdue';
+    }
 
-        return now()->startOfDay()->gt($this->deadline);
+    public function materialDeadlineStatus(): ?string
+    {
+        return DeadlineIndicator::status(
+            $this->material_deadline,
+            $this->status === SalesOrderStatus::Completed,
+        );
+    }
+
+    public function productionDeadlineStatus(): ?string
+    {
+        return DeadlineIndicator::status(
+            $this->deadline,
+            $this->status === SalesOrderStatus::Completed,
+        );
     }
 }

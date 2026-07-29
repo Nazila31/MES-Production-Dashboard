@@ -39,11 +39,8 @@ async function createWorkOrder(soId, payload = null, formData = null) {
     });
 }
 
-async function releaseWorkOrder(soId, scheduleDate) {
-    return apiRequest(`/ppic/work-orders/${soId}/release`, {
-        method: "POST",
-        body: { schedule_date: scheduleDate }
-    });
+async function releaseWorkOrder(soId) {
+    return apiRequest(`/ppic/work-orders/${soId}/release`, { method: "POST" });
 }
 
 async function fetchWorkOrder(soId) {

@@ -20,7 +20,6 @@ async function loadQuotationForEdit(id) {
         setValue("pic", data.pic);
         setValue("machine", data.machine);
         setValue("amount", data.amount);
-        setValue("deadline", data.deadline);
         setValue("description", data.description);
 
         const numberField = document.querySelector('[name="quotation_number"]');

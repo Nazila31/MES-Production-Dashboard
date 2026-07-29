@@ -30,7 +30,6 @@ async function loadWorkOrderPage(soId) {
             woInput.value = woResponse.data.wo_number;
             woInput.readOnly = true;
         }
-        setValue("scheduleDate", woResponse.data.schedule_date);
 
         if (woResponse.data.status === "released") {
             document.getElementById("releaseBtn")?.setAttribute("disabled", "true");
@@ -56,14 +55,8 @@ async function loadWorkOrderPage(soId) {
     }
 
     document.getElementById("releaseBtn")?.addEventListener("click", async () => {
-        const scheduleDate = document.getElementById("scheduleDate")?.value;
-        if (!scheduleDate) {
-            alert("Please set production schedule date");
-            return;
-        }
-
         try {
-            await releaseWorkOrder(soId, scheduleDate);
+            await releaseWorkOrder(soId);
             document.getElementById("successModal")?.classList.add("show");
         } catch (error) {
             alert(error.message);
@@ -86,9 +79,9 @@ async function loadSchedule() {
         <tr>
             <td>${item.wo_number}</td>
             <td>${item.so_number || `SO #${item.so_id}`}</td>
-            <td>${formatDate(item.schedule_date)}</td>
+            <td>${formatDate(item.release_date || item.schedule_date)}</td>
             <td><span class="badge-kustom status-completed">Released</span></td>
-        </tr>`).join("") : `<tr><td colspan="4" class="text-center py-4 text-muted">No scheduled work orders.</td></tr>`;
+        </tr>`).join("") : `<tr><td colspan="4" class="text-center py-4 text-muted">No released work orders yet.</td></tr>`;
 }
 
 function setText(id, value) {

@@ -27,9 +27,15 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('quotations', QuotationController::class);
             Route::post('/quotations/{quotation}/approve', [QuotationController::class, 'approve']);
             Route::post('/quotations/{quotation}/reject', [QuotationController::class, 'reject']);
+            Route::post('/quotations/{quotation}/follow-ups', [QuotationController::class, 'storeFollowUp']);
         });
 
+        Route::patch('/sales-orders/{sales_order}/deadlines', [SalesOrderController::class, 'updateDeadlines'])
+            ->middleware('role:admin,ppic');
+
         Route::get('/sales-orders/{sales_order}/preview', [SalesOrderController::class, 'preview'])
+            ->middleware('role:admin,ppic,production');
+        Route::get('/sales-orders/{sales_order}/spk-preview', [SalesOrderController::class, 'spkPreview'])
             ->middleware('role:admin,ppic,production');
         Route::get('/sales-orders/{sales_order}/delivery-note-preview', [SalesOrderController::class, 'deliveryNotePreview'])
             ->middleware('role:admin,ppic,production');

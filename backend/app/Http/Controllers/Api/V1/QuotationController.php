@@ -6,9 +6,11 @@ use App\Enums\QuotationStatus;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Quotation;
+use App\Models\QuotationFollowUp;
 use App\Services\ActivityLogService;
 use App\Services\MesNotificationService;
 use App\Support\MesFileRules;
+use App\Support\MesStorageUrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +24,7 @@ class QuotationController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = Quotation::query()->latest();
+        $query = Quotation::query()->withCount('followUps')->latest();
 
         if ($status = $request->string('status')->toString()) {
             $query->where('status', $status);
@@ -50,7 +52,9 @@ class QuotationController extends Controller
 
     public function show(Quotation $quotation): JsonResponse
     {
-        return response()->json(['data' => $this->transform($quotation)]);
+        $quotation->load(['followUps.creator']);
+
+        return response()->json(['data' => $this->transform($quotation, true)]);
     }
 
     public function store(Request $request): JsonResponse
@@ -61,7 +65,6 @@ class QuotationController extends Controller
             'pic' => ['nullable', 'string', 'max:255'],
             'machine' => ['nullable', 'string', 'max:255'],
             'amount' => ['nullable', 'numeric', 'min:0'],
-            'deadline' => ['nullable', 'date'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'in:draft,sent'],
             'file' => MesFileRules::document(),
@@ -75,7 +78,6 @@ class QuotationController extends Controller
             'pic' => $data['pic'] ?? null,
             'machine' => $data['machine'] ?? null,
             'amount' => $data['amount'] ?? 0,
-            'deadline' => $data['deadline'] ?? null,
             'description' => $data['description'] ?? null,
             'status' => $data['status'] ?? QuotationStatus::Draft,
             'created_by' => $request->user()->id,
@@ -107,7 +109,6 @@ class QuotationController extends Controller
             'pic' => ['nullable', 'string', 'max:255'],
             'machine' => ['nullable', 'string', 'max:255'],
             'amount' => ['nullable', 'numeric', 'min:0'],
-            'deadline' => ['nullable', 'date'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'in:draft,sent'],
             'file' => MesFileRules::document(),
@@ -209,6 +210,34 @@ class QuotationController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function storeFollowUp(Request $request, Quotation $quotation): JsonResponse
+    {
+        $data = $request->validate([
+            'follow_up_date' => ['required', 'date'],
+            'description' => ['required', 'string', 'max:2000'],
+            'status' => ['nullable', 'in:waiting_response,negotiating,revision,approved,rejected'],
+        ]);
+
+        $followUp = $quotation->followUps()->create([
+            'follow_up_date' => $data['follow_up_date'],
+            'description' => $data['description'],
+            'status' => $data['status'] ?? null,
+            'created_by' => $request->user()->id,
+        ]);
+
+        $this->activities->log(
+            "Follow up added for quotation {$quotation->quotation_number}.",
+            'marketing',
+            $request->user(),
+            $quotation,
+        );
+
+        return response()->json([
+            'data' => $this->transformFollowUp($followUp->load('creator')),
+            'message' => 'Follow up recorded successfully.',
+        ], 201);
+    }
+
     public function preview(Quotation $quotation): JsonResponse
     {
         if (! $quotation->file_path) {
@@ -217,7 +246,7 @@ class QuotationController extends Controller
 
         return response()->json([
             'data' => [
-                'url' => Storage::disk('public')->url($quotation->file_path),
+                'url' => MesStorageUrl::url($quotation->file_path),
                 'file_name' => $quotation->file_name,
                 'mime' => $quotation->file_mime,
             ],
@@ -240,9 +269,9 @@ class QuotationController extends Controller
         ];
     }
 
-    private function transform(Quotation $quotation): array
+    private function transform(Quotation $quotation, bool $detailed = false): array
     {
-        return [
+        $data = [
             'id' => $quotation->id,
             'quotation_number' => $quotation->quotation_number,
             'client' => $quotation->client,
@@ -251,11 +280,33 @@ class QuotationController extends Controller
             'amount' => (float) $quotation->amount,
             'status' => $quotation->status->value,
             'description' => $quotation->description,
-            'deadline' => optional($quotation->deadline)?->format('Y-m-d'),
             'created_at' => $quotation->created_at?->format('Y-m-d'),
             'file_name' => $quotation->file_name,
-            'file_url' => $quotation->file_path ? Storage::disk('public')->url($quotation->file_path) : null,
+            'file_url' => MesStorageUrl::url($quotation->file_path),
             'has_file' => (bool) $quotation->file_path,
+            'follow_up_count' => $quotation->follow_ups_count ?? $quotation->followUps()->count(),
+        ];
+
+        if ($detailed) {
+            $data['follow_ups'] = $quotation->followUps
+                ->sortBy('follow_up_date')
+                ->values()
+                ->map(fn (QuotationFollowUp $followUp) => $this->transformFollowUp($followUp));
+        }
+
+        return $data;
+    }
+
+    private function transformFollowUp(QuotationFollowUp $followUp): array
+    {
+        return [
+            'id' => $followUp->id,
+            'follow_up_date' => $followUp->follow_up_date?->format('Y-m-d'),
+            'description' => $followUp->description,
+            'status' => $followUp->status?->value,
+            'status_label' => $followUp->status?->label(),
+            'created_by' => $followUp->creator?->name,
+            'created_at' => $followUp->created_at?->toIso8601String(),
         ];
     }
 }

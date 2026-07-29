@@ -39,7 +39,7 @@
                 <div class="card-default">
                     <div class="table-responsive">
                         <table class="table align-middle project-table">
-                            <thead><tr><th>SO Number</th><th>Quotation</th><th>Client</th><th>SPK Global</th><th>Progress</th><th>Status</th><th>Deadline</th><th>Action</th></tr></thead>
+                            <thead><tr><th>SO Number</th><th>Quotation</th><th>Client</th><th>SPK Global</th><th>Progress</th><th>Status</th><th>Material Deadline</th><th>Production Deadline</th><th>Action</th></tr></thead>
                             <tbody id="dataTableBody"></tbody>
                         </table>
                     </div>
@@ -58,6 +58,10 @@
             <input type="text" class="form-control mb-3" id="soNumberInput" placeholder="SO260727001">
             <label class="form-label">SPK Global Number</label>
             <input type="text" class="form-control mb-3" id="spkGlobalInput" placeholder="SPK260727001">
+            <label class="form-label">Upload Sales Order (PDF/Gambar)</label>
+            <input type="file" class="form-control mb-3" id="soFileInput" accept=".pdf,.jpg,.jpeg,.png">
+            <label class="form-label">Upload SPK (PDF/Gambar)</label>
+            <input type="file" class="form-control mb-3" id="spkFileInput" accept=".pdf,.jpg,.jpeg,.png">
             <div class="delete-action">
                 <button class="btn btn-light" onclick="closeCreateSOModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="generateSO()">Generate SO</button>

@@ -33,7 +33,8 @@
                 <th>SO Date</th>
                 <th>SO Number</th>
                 <th>Client</th>
-                <th>Deadline</th>
+                <th>Material Deadline</th>
+                <th>Production Deadline</th>
                 <th>Production Start</th>
                 <th>Completion</th>
                 <th>Total Hari</th>
@@ -48,7 +49,8 @@
                     <td>{{ $row['so_date'] }}</td>
                     <td>{{ $row['so_number'] }}</td>
                     <td>{{ $row['client'] }}</td>
-                    <td>{{ $row['deadline_date'] }}</td>
+                    <td>{{ $row['material_deadline'] }}</td>
+                    <td>{{ $row['production_deadline'] }}</td>
                     <td>{{ $row['production_start'] }}</td>
                     <td>{{ $row['completion_date'] }}</td>
                     <td>{{ $row['total_days'] ?? '-' }}</td>

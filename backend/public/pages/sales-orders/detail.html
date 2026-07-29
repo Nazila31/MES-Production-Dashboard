@@ -31,9 +31,20 @@
                         <div class="col-md-6 detail-item"><label>PIC</label><h6 id="pic">-</h6></div>
                         <div class="col-md-6 detail-item"><label>Status</label><span class="badge-kustom" id="statusBadge">-</span></div>
                         <div class="col-md-6 detail-item"><label>Start Date</label><h6 id="startDate">-</h6></div>
-                        <div class="col-md-6 detail-item"><label>Deadline</label><h6 id="deadline">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Deadline Pembelian Material</label><h6 id="materialDeadline">-</h6></div>
+                        <div class="col-md-6 detail-item"><label>Deadline Produksi</label><h6 id="productionDeadline">-</h6></div>
                         <div class="col-12 mt-3"><label class="mb-2">Progress</label><div class="progress"><div class="progress-bar bg-primary" id="progressBar" style="width:0%">0%</div></div></div>
                     </div>
+                </div>
+                <div class="card-default mt-4" id="deadlineEditSection" style="display:none;">
+                    <h5 class="mb-4">Kelola Deadline</h5>
+                    <form id="deadlineForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Deadline Pembelian Material</label><input type="date" name="material_deadline" class="form-control"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Deadline Produksi</label><input type="date" name="deadline" class="form-control"></div>
+                            <div class="col-12"><button type="submit" class="btn btn-primary"><i class="bi bi-calendar-check"></i> Simpan Deadline</button></div>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-default mt-4"><h5>Description</h5><p id="description">-</p></div>
                 <div class="card-default mt-4"><h5 class="mb-4">Production Timeline</h5><ul class="timeline" id="productionTimeline"></ul></div>

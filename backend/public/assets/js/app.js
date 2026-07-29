@@ -19,17 +19,9 @@ const mainWrapper = document.querySelector(".main-wrapper");
 ========================================================== */
 
 function closeAllDropdowns() {
-    if (notificationDropdown) {
-        notificationDropdown.classList.remove("show");
-    }
-
-    if (profileDropdown) {
-        profileDropdown.classList.remove("show");
-    }
-
-    if (profileToggle) {
-        profileToggle.classList.remove("active");
-    }
+    document.getElementById("notificationDropdown")?.classList.remove("show");
+    document.getElementById("profileDropdown")?.classList.remove("show");
+    document.getElementById("profileToggle")?.classList.remove("active");
 }
 
 /* ==========================================================
@@ -68,28 +60,7 @@ if (notificationToggle && notificationDropdown) {
 }
 
 /* ==========================================================
-    Profile Dropdown
-========================================================== */
-
-if (profileToggle && profileDropdown) {
-    profileToggle.addEventListener("click", (event) => {
-        event.stopPropagation();
-
-        if (notificationDropdown) {
-            notificationDropdown.classList.remove("show");
-        }
-
-        profileDropdown.classList.toggle("show");
-        profileToggle.classList.toggle("active");
-    });
-
-    profileDropdown.addEventListener("click", (event) => {
-        event.stopPropagation();
-    });
-}
-
-/* ==========================================================
-    Close Dropdowns on Outside Click
+    Profile Dropdown — handled by layout.js (ensureProfileControls)
 ========================================================== */
 
 document.addEventListener("click", closeAllDropdowns);

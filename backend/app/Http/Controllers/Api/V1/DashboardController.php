@@ -81,7 +81,7 @@ class DashboardController extends Controller
             'quotation_number' => $q->quotation_number,
             'client' => $q->client,
             'status' => $q->status->value,
-            'deadline' => $q->deadline?->format('Y-m-d'),
+            'follow_up_count' => $q->followUps()->count(),
             'amount' => (float) $q->amount,
         ]);
 
@@ -90,9 +90,9 @@ class DashboardController extends Controller
                 'stats' => $stats,
                 'recent_quotations' => $recent,
                 'activities' => $this->recentActivities('marketing'),
-                'deadlines' => $this->quotationDeadlines(),
-                'side_panel_title' => 'Recent Quotations',
-                'side_panel_subtitle' => 'Latest quotation updates',
+                'deadlines' => $this->recentQuotationFollowUps(),
+                'side_panel_title' => 'Recent Follow Ups',
+                'side_panel_subtitle' => 'Latest client communication',
             ],
         ]);
     }
@@ -119,7 +119,10 @@ class DashboardController extends Controller
             'so_number' => $so->so_number,
             'client' => $so->client,
             'status' => $so->status->value,
-            'deadline' => $so->deadline?->format('Y-m-d'),
+            'material_deadline' => $so->material_deadline?->format('Y-m-d'),
+            'production_deadline' => $so->deadline?->format('Y-m-d'),
+            'material_deadline_status' => $so->materialDeadlineStatus(),
+            'production_deadline_status' => $so->productionDeadlineStatus(),
         ]);
 
         return response()->json([
@@ -199,8 +202,27 @@ class DashboardController extends Controller
             ->map(fn (SalesOrder $so) => [
                 'so_number' => $so->so_number,
                 'client' => $so->client,
-                'deadline' => $so->deadline?->format('Y-m-d'),
+                'material_deadline' => $so->material_deadline?->format('Y-m-d'),
+                'production_deadline' => $so->deadline?->format('Y-m-d'),
+                'material_deadline_status' => $so->materialDeadlineStatus(),
+                'production_deadline_status' => $so->productionDeadlineStatus(),
                 'status' => $so->production_stage?->value ?? $so->status->value,
+            ])->all();
+    }
+
+    private function recentQuotationFollowUps(): array
+    {
+        return \App\Models\QuotationFollowUp::query()
+            ->with('quotation')
+            ->latest('follow_up_date')
+            ->limit(10)
+            ->get()
+            ->map(fn ($followUp) => [
+                'so_number' => $followUp->quotation?->quotation_number,
+                'client' => $followUp->quotation?->client,
+                'deadline' => $followUp->follow_up_date?->format('Y-m-d'),
+                'status' => $followUp->status?->value ?? 'follow_up',
+                'status_label' => $followUp->status?->label() ?? 'Follow Up',
             ])->all();
     }
 

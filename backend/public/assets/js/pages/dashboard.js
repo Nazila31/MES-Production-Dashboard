@@ -108,7 +108,7 @@ function updateChartSection(role, data) {
 
 function renderSidePanel(role, data) {
     if (role === "marketing") {
-        renderMarketingQuotations(data.recent_quotations || data.deadlines);
+        renderFollowUps(data.deadlines || []);
         return;
     }
 
@@ -123,6 +123,27 @@ function renderSidePanel(role, data) {
     }
 
     renderDeadlines(data.deadlines || []);
+}
+
+function renderFollowUps(items) {
+    const container = document.getElementById("deadlineList");
+    if (!container) return;
+
+    if (!items?.length) {
+        container.className = "deadline-list text-center py-5";
+        container.innerHTML = `<i class="bi bi-chat-dots fs-1 text-secondary"></i><h6 class="mt-3">No Follow Ups Yet</h6><p class="text-muted mb-0">Follow up activity will appear here.</p>`;
+        return;
+    }
+
+    container.className = "deadline-list";
+    container.innerHTML = items.map((item) => `
+        <div class="deadline-item">
+            <div><strong>${item.so_number}</strong><p class="mb-0 text-muted">${item.client}</p></div>
+            <div class="text-end">
+                <span class="badge-kustom badge-info">${item.status_label || formatFollowUpStatus(item.status)}</span>
+                <small class="d-block text-muted mt-1">${formatDate(item.deadline)}</small>
+            </div>
+        </div>`).join("");
 }
 
 function renderMarketingQuotations(items) {
@@ -162,7 +183,8 @@ function renderPlanningQueue(items) {
             <div><strong>${item.so_number}</strong><p class="mb-0 text-muted">${item.client}</p></div>
             <div class="text-end">
                 <span class="badge-kustom ${getStatusStyles(item.status).badge}">${formatStatusLabel(item.status)}</span>
-                <small class="d-block text-muted mt-1">${formatDate(item.deadline)}</small>
+                <small class="d-block text-muted mt-1">Material: ${renderDeadlineCell(item.material_deadline, item.material_deadline_status)}</small>
+                <small class="d-block text-muted">Produksi: ${renderDeadlineCell(item.production_deadline, item.production_deadline_status)}</small>
             </div>
         </div>`).join("");
 }
@@ -220,7 +242,11 @@ function renderDeadlines(deadlines) {
     container.className = "deadline-list";
     container.innerHTML = deadlines.map((item) => `
         <div class="deadline-item"><div><strong>${item.so_number}</strong><p class="mb-0 text-muted">${item.client}</p></div>
-        <div class="text-end"><span class="badge-kustom ${getStatusStyles(item.status).badge}">${formatStatusLabel(item.status)}</span><small class="d-block text-muted mt-1">${formatDate(item.deadline)}</small></div></div>`).join("");
+        <div class="text-end">
+            <span class="badge-kustom ${getStatusStyles(item.status).badge}">${formatStatusLabel(item.status)}</span>
+            <small class="d-block text-muted mt-1">Material: ${renderDeadlineCell(item.material_deadline, item.material_deadline_status)}</small>
+            <small class="d-block text-muted">Produksi: ${renderDeadlineCell(item.production_deadline, item.production_deadline_status)}</small>
+        </div></div>`).join("");
 }
 
 function renderDashboardChart(data, label = "Production") {

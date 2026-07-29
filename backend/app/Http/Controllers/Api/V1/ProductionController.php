@@ -13,6 +13,7 @@ use App\Services\ActivityLogService;
 use App\Services\MesNotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Support\MesStorageUrl;
 use Illuminate\Support\Facades\Storage;
 
 class ProductionController extends Controller
@@ -65,7 +66,7 @@ class ProductionController extends Controller
                 'delivery_recipient' => $so->delivery_recipient,
                 'delivery_date' => optional($so->delivery_date)?->format('Y-m-d'),
                 'delivery_note_notes' => $so->delivery_note_notes,
-                'delivery_file_url' => $so->delivery_file_path ? Storage::disk('public')->url($so->delivery_file_path) : null,
+                'delivery_file_url' => MesStorageUrl::url($so->delivery_file_path),
             ]);
 
         return response()->json(['data' => $data]);
@@ -246,11 +247,15 @@ class ProductionController extends Controller
         $returnStage = ProductionStage::from($data['return_stage']);
         $log = $salesOrder->stageLogs()->where('stage', ProductionStage::Qc)->firstOrFail();
 
-        $log->update([
-            'status' => StageLogStatus::Rejected,
-            'reject_notes' => $data['notes'],
+        if ($log->status !== StageLogStatus::InProgress) {
+            return response()->json(['message' => 'QC must be started before it can be rejected.'], 422);
+        }
+
+        QcRejectLog::create([
+            'sales_order_id' => $salesOrder->id,
+            'rejected_by' => $request->user()->id,
+            'reject_reason' => $data['notes'],
             'return_to_stage' => $returnStage,
-            'finished_at' => now(),
         ]);
 
         $reset = false;
@@ -266,11 +271,16 @@ class ProductionController extends Controller
                     'finished_at' => null,
                     'duration_minutes' => null,
                     'operator_id' => null,
-                    'reject_notes' => $stage === ProductionStage::Qc ? $data['notes'] : null,
-                    'return_to_stage' => $stage === ProductionStage::Qc ? $returnStage->value : null,
+                    'reject_notes' => null,
+                    'return_to_stage' => null,
                 ]);
             }
         }
+
+        $salesOrder->stageLogs()->where('stage', ProductionStage::Qc)->update([
+            'reject_notes' => $data['notes'],
+            'return_to_stage' => $returnStage->value,
+        ]);
 
         $progress = match ($returnStage) {
             ProductionStage::Fabrication => 0,
@@ -284,13 +294,6 @@ class ProductionController extends Controller
             'production_stage' => $returnStage,
             'progress' => $progress,
             'qc_passed_at' => null,
-        ]);
-
-        QcRejectLog::create([
-            'sales_order_id' => $salesOrder->id,
-            'rejected_by' => $request->user()->id,
-            'reject_reason' => $data['notes'],
-            'return_to_stage' => $returnStage,
         ]);
 
         $this->activities->log(
@@ -316,7 +319,11 @@ class ProductionController extends Controller
             'status' => $salesOrder->status->value,
             'production_stage' => $salesOrder->production_stage?->value,
             'progress' => $salesOrder->progress,
+            'material_deadline' => optional($salesOrder->material_deadline)?->format('Y-m-d'),
+            'production_deadline' => optional($salesOrder->deadline)?->format('Y-m-d'),
             'deadline' => optional($salesOrder->deadline)?->format('Y-m-d'),
+            'material_deadline_status' => $salesOrder->materialDeadlineStatus(),
+            'production_deadline_status' => $salesOrder->productionDeadlineStatus(),
         ];
 
         if ($detailed) {
