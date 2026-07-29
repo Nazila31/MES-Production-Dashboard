@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/reports.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="reports" data-title="Reports" data-breadcrumb="Home / Reports" data-roles="admin">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>Manufacturing Execution System</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Reports</h5><small class="text-muted">Home / Reports</small></div></div></header>
+            <main class="content">
+                <div class="reports-header">
+                    <div>
+                        <h1 class="page-title">Production Reports</h1>
+                        <p class="page-subtitle">Complete project history from quotation to delivery with supporting documents.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" id="exportCSV"><i class="bi bi-download"></i> Export CSV</button>
+                        <button class="btn btn-outline-primary" id="exportPDF"><i class="bi bi-file-earmark-pdf"></i> Export PDF</button>
+                    </div>
+                </div>
+
+                <div class="card-default report-filter mb-4">
+                    <div class="row g-3">
+                        <div class="col-lg-3"><label class="form-label small text-muted">Date From</label><input type="date" class="form-control" id="dateFrom"></div>
+                        <div class="col-lg-3"><label class="form-label small text-muted">Date To</label><input type="date" class="form-control" id="dateTo"></div>
+                        <div class="col-lg-3"><label class="form-label small text-muted">Client</label><input type="text" class="form-control" id="clientFilter" placeholder="Client name"></div>
+                        <div class="col-lg-3"><label class="form-label small text-muted">Sales Order Number</label><input type="text" class="form-control" id="soFilter" placeholder="SO number"></div>
+                        <div class="col-lg-3"><label class="form-label small text-muted">Quotation Number</label><input type="text" class="form-control" id="quotationFilter" placeholder="Quotation number"></div>
+                        <div class="col-lg-3">
+                            <label class="form-label small text-muted">Status Project</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="waiting_ppic">Waiting PPIC</option>
+                                <option value="ppic_processing">PPIC Processing</option>
+                                <option value="released">Released</option>
+                                <option value="in_production">In Production</option>
+                                <option value="qc_passed">QC Passed</option>
+                                <option value="ready_for_delivery">Ready for Delivery</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 d-flex align-items-end"><button class="btn btn-outline-primary w-100" id="generateReport"><i class="bi bi-funnel"></i> Apply Filter</button></div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-xl-3 col-md-6"><div class="report-card"><div class="report-icon report-primary"><i class="bi bi-folder-check"></i></div><h6>Total Orders</h6><h2 id="reportTotalOrders">0</h2></div></div>
+                    <div class="col-xl-3 col-md-6"><div class="report-card"><div class="report-icon report-success"><i class="bi bi-check-circle"></i></div><h6>Completed</h6><h2 id="reportCompleted">0</h2></div></div>
+                    <div class="col-xl-3 col-md-6"><div class="report-card"><div class="report-icon report-warning"><i class="bi bi-clock-history"></i></div><h6>Delayed</h6><h2 id="reportDelayed">0</h2></div></div>
+                    <div class="col-xl-3 col-md-6"><div class="report-card"><div class="report-icon report-info"><i class="bi bi-graph-up-arrow"></i></div><h6>Efficiency</h6><h2 id="reportEfficiency">0%</h2></div></div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <div class="col-lg-6"><div class="card-default h-100"><div class="section-header"><h5>Monthly Production</h5></div><div class="report-chart"><canvas id="productionChart"></canvas></div><p class="empty-chart-text" id="productionChartText">No production data available.</p></div></div>
+                    <div class="col-lg-3"><div class="card-default h-100"><div class="section-header"><h5>Department Distribution</h5></div><div class="report-chart"><canvas id="departmentChart"></canvas></div><p class="empty-chart-text" id="departmentChartText">No data available.</p></div></div>
+                    <div class="col-lg-3"><div class="card-default h-100"><div class="section-header"><h5>Status Distribution</h5></div><div class="report-chart"><canvas id="statusChart"></canvas></div><p class="empty-chart-text" id="statusChartText">No data available.</p></div></div>
+                </div>
+
+                <div class="card-default mt-4">
+                    <div class="section-header"><h5>Project History</h5><small>Click a row to view uploaded documents</small></div>
+                    <div class="table-responsive">
+                        <table class="table project-table report-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Quotation Date</th>
+                                    <th>SO Date</th>
+                                    <th>SO Number</th>
+                                    <th>Client</th>
+                                    <th>Material Deadline</th>
+                                    <th>Production Deadline</th>
+                                    <th>Production Start</th>
+                                    <th>Completion Date</th>
+                                    <th>Total Hari</th>
+                                    <th>Status</th>
+                                    <th>Documents</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <footer class="footer">© 2026 PT Karya Machindo Industries<br>Manufacturing Execution System v2.0</footer>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="documentPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentPreviewTitle">Document Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="documentPreviewBody"></div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" id="documentPreviewDownload" href="#" download><i class="bi bi-download"></i> Download</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/utils/charts.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/reports.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/reports.js"></script>
+</body>
+</html>

@@ -4,7 +4,14 @@ use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 Route::get('/', function () {
-    return redirect('/index.html');
+    if (is_file(public_path('index.html'))) {
+        return redirect('/index.html');
+    }
+
+    return response(
+        'MPMS frontend belum di-sync. Jalankan: cd frontend && npm run build',
+        Response::HTTP_SERVICE_UNAVAILABLE
+    );
 });
 
 Route::get('/storage/{path}', function (string $path) {

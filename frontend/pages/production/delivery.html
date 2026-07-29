@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery | MES</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/projects.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="delivery" data-title="Delivery" data-breadcrumb="Production / Delivery">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>MES</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Delivery</h5><small class="text-muted">Input Resi / Shipment</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2 class="page-title">Delivery / Input Resi</h2><span class="page-subtitle">Complete shipment for projects ready for delivery</span></div></div>
+                <div class="card-default mb-4"><div id="deliveryQueue"></div></div>
+                <div class="card-default" id="shipmentFormSection" style="display:none;">
+                    <h5 class="mb-4">Shipment Form — <span id="selectedSoNumber">-</span></h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4 detail-item"><label>Surat Jalan No</label><h6 id="deliveryNoteNumber">-</h6></div>
+                        <div class="col-md-4 detail-item"><label>Penerima</label><h6 id="deliveryRecipient">-</h6></div>
+                        <div class="col-md-4 detail-item"><label>Tanggal Surat Jalan</label><h6 id="deliveryNoteDate">-</h6></div>
+                    </div>
+                    <form id="shipmentForm">
+                        <input type="hidden" id="selectedSoId" name="so_id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label class="form-label">Nomor Resi</label><input type="text" name="tracking_number" class="form-control" required placeholder="RESI-001"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Tanggal Pengiriman</label><input type="date" name="shipment_date" class="form-control" required></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Jasa Ekspedisi / Kurir</label><input type="text" name="vehicle_courier" class="form-control" placeholder="JNE / Internal Truck"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Keterangan</label><input type="text" name="shipment_notes" class="form-control" placeholder="Catatan pengiriman"></div>
+                            <div class="col-md-6 mb-3"><label class="form-label">Upload Bukti Pengiriman</label><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-truck"></i> Simpan Delivery</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Delivery Saved</h3><p>Project marked as delivered/completed.</p><button class="btn btn-primary" onclick="location.reload()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/production.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/production-delivery.js"></script>
+</body>
+</html>

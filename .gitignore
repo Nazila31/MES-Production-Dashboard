@@ -1,0 +1,59 @@
+# MPMS — Root .gitignore
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies
+backend/vendor/
+backend/node_modules/
+frontend/node_modules/
+
+# Laravel runtime
+backend/storage/*.key
+backend/storage/logs/
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/storage/pail/
+backend/bootstrap/cache/*.php
+backend/public/storage
+backend/public/hot
+backend/public/build
+backend/public/fonts-manifest.dev.json
+
+# Frontend build output synced to public (source lives in frontend/)
+backend/public/assets/
+backend/public/pages/
+backend/public/index.html
+backend/public/login.html
+
+# Archive / temp
+_archive/
+*.log
+.phpunit.result.cache
+
+# Composer installer (if present)
+composer-setup.php
+composer.phar
+
+# Python docs cache
+docs/__pycache__/
+*.pyc
+
+# npm
+package-lock.json
+frontend/package-lock.json
+backend/package-lock.json

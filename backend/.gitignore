@@ -18,6 +18,11 @@
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
+# Synced from ../frontend/ — run: cd frontend && npm run build
+/public/assets
+/public/pages
+/public/index.html
+/public/login.html
 /storage/*.key
 /storage/pail
 /vendor

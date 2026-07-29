@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Order | PPIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/detail-project.css">
+    <link rel="stylesheet" href="../../assets/css/add-project.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="ppic" data-title="Work Order" data-breadcrumb="PPIC / Work Order">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>MES</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Work Order</h5><small class="text-muted">PPIC / Work Order</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2>Work Order</h2><p>Release production to shop floor</p></div><a href="index.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a></div>
+                <div class="card-default">
+                    <div class="row mb-4">
+                        <div class="col-md-4 detail-item"><label>SO Number</label><h6 id="soNumber">-</h6></div>
+                        <div class="col-md-4 detail-item"><label>SPK Global</label><h6 id="spkGlobal">-</h6></div>
+                        <div class="col-md-4 detail-item"><label>Client</label><h6 id="client">-</h6></div>
+                        <div class="col-md-4 detail-item"><label>Work Order No</label><input type="text" class="form-control" id="woNumberInput" placeholder="WO260727001"></div>
+                        <div class="col-md-4 detail-item"><label>Tanggal Rilis WO</label><p class="form-control-plaintext text-muted mb-0">Otomatis diisi saat Work Order dirilis ke Production.</p></div>
+                    </div>
+                    <button class="btn btn-outline-primary" id="createWOBtn"><i class="bi bi-clipboard-plus"></i> Create Work Order</button>
+                    <button class="btn btn-primary ms-2" id="releaseBtn"><i class="bi bi-send"></i> Release Work Order</button>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Work Order Released</h3><p>Production can now begin.</p><button class="btn btn-primary" onclick="finishRelease()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/salesOrders.js"></script>
+    <script src="../../assets/js/api/ppic.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/ppic-work-order.js"></script>
+</body>
+</html>

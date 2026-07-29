@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM Input | PPIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/projects.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="ppic" data-title="BOM Input" data-breadcrumb="PPIC / BOM">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>MES</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">BOM Input</h5><small class="text-muted">PPIC / BOM</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2>Bill of Materials</h2><p>SO: <strong id="soNumber">-</strong> | Client: <strong id="client">-</strong></p></div><a href="index.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a></div>
+                <div class="card-default">
+                    <form id="bomForm">
+                        <div class="table-responsive">
+                            <table class="table project-table">
+                                <thead><tr><th>Material Code</th><th>Material Name</th><th>Qty</th><th>Unit</th><th></th></tr></thead>
+                                <tbody id="bomTableBody"></tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary mt-3" id="addRowBtn"><i class="bi bi-plus"></i> Add Material</button>
+                        <hr>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Save BOM</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>BOM Saved</h3><button class="btn btn-primary" onclick="finishSave()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/salesOrders.js"></script>
+    <script src="../../assets/js/api/ppic.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/ppic-bom.js"></script>
+</body>
+</html>

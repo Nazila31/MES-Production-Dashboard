@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\Quotation;
+use App\Models\SalesOrder;
+use App\Models\WorkOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,6 +15,7 @@ class NotificationController extends Controller
     public function index(Request $request): JsonResponse
     {
         $notifications = Notification::query()
+            ->with('notifiable')
             ->where(function ($query) use ($request) {
                 $query->where('user_id', $request->user()->id)
                     ->orWhereNull('user_id');
@@ -24,6 +28,7 @@ class NotificationController extends Controller
                 'title' => $n->title,
                 'message' => $n->message,
                 'read' => $n->read,
+                'href' => $this->notificationHref($n),
                 'created_at' => $n->created_at?->toIso8601String(),
             ]);
 
@@ -58,5 +63,37 @@ class NotificationController extends Controller
             ->count();
 
         return response()->json(['data' => ['count' => $count]]);
+    }
+
+    private function notificationHref(Notification $notification): string
+    {
+        $notifiable = $notification->notifiable;
+
+        if ($notifiable instanceof SalesOrder) {
+            return match ($notification->type) {
+                'so_created', 'qc_passed', 'ready_for_delivery' => 'pages/sales-orders/detail.html?id='.$notifiable->id,
+                'stage_completed', 'work_order_released' => 'pages/production/index.html',
+                'project_completed' => 'pages/reports/index.html',
+                default => 'pages/sales-orders/detail.html?id='.$notifiable->id,
+            };
+        }
+
+        if ($notifiable instanceof Quotation) {
+            return 'pages/quotations/detail.html?id='.$notifiable->id;
+        }
+
+        if ($notifiable instanceof WorkOrder) {
+            return 'pages/production/index.html';
+        }
+
+        return match ($notification->type) {
+            'quotation_approved' => 'pages/quotations/index.html',
+            'so_created' => 'pages/ppic/index.html',
+            'work_order_released', 'stage_completed' => 'pages/production/index.html',
+            'qc_passed', 'ready_for_delivery' => 'pages/sales-orders/index.html',
+            'project_completed' => 'pages/reports/index.html',
+            'deadline_reminder' => 'index.html',
+            default => 'pages/notifications/index.html',
+        };
     }
 }

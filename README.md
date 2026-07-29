@@ -1,52 +1,82 @@
-# MES Production Dashboard
+# Manufacturing Project Monitoring System (MPMS)
 
-Manufacturing Project Monitoring System (MPMS) — monorepo untuk backend Laravel dan frontend statis.
+Sistem monitoring proyek manufaktur untuk **PT Karya Machindo Industries**.
 
-**Repository GitHub:** https://github.com/Nazila31/MES-Production-Dashboard.git
+**Repository:** https://github.com/Nazila31/MES-Production-Dashboard.git
 
 ## Struktur Project
 
 ```
-MES_Cleaned_Project - Copy/     ← Root Git repository
-├── backend/                    ← Laravel API + frontend statis (public/)
-├── frontend/                   ← Frontend legacy/referensi (jika ada)
-├── .vscode/
-└── CLEANUP_REPORT.md
+MPMS/
+├── backend/          # Laravel API (PHP 8.3+)
+├── frontend/         # Static HTML/CSS/JS (source frontend)
+├── scripts/          # Sync & maintenance scripts
+├── docs/             # User guidebook
+├── dokumentasi/      # Dokumentasi struktur project
+└── README.md
 ```
 
-| Path | Fungsi |
-|------|--------|
-| `D:\Nazila\MAGANG\MES_Cleaned_Project - Copy` | **Root Git** — jalankan semua perintah Git di sini |
-| `...\backend` | **Laravel** — jalankan `php artisan`, `composer`, dll. di sini |
-| `...\frontend` | Frontend terpisah (jika digunakan) |
+| Folder | Fungsi |
+|--------|--------|
+| `backend/` | Laravel REST API, database, file upload, RBAC |
+| `frontend/` | Source frontend — HTML, CSS, JavaScript |
+| `backend/public/` | Document root (Laravel + frontend hasil sync) |
 
-## Git (dari root project)
+> Detail lengkap: [dokumentasi/STRUKTUR_PROJECT.md](dokumentasi/STRUKTUR_PROJECT.md)
 
-Semua perintah Git dijalankan dari folder utama, **bukan** dari `backend/`:
+---
 
-```powershell
-cd "D:\Nazila\MAGANG\MES_Cleaned_Project - Copy"
+## Quick Start
 
-git status
-git add .
-git commit -m "pesan commit"
-git push origin main
-```
-
-## Setup Backend (dari folder `backend`)
+### 1. Setup Backend
 
 ```powershell
-cd "D:\Nazila\MAGANG\MES_Cleaned_Project - Copy\backend"
+cd backend
 
 composer install
 copy .env.example .env
 php artisan key:generate
 php artisan migrate:fresh --seed
 php artisan storage:link
+```
+
+### 2. Sync Frontend
+
+```powershell
+cd frontend
+npm install
+npm run build
+```
+
+### 3. Jalankan
+
+```powershell
+cd backend
 php artisan serve
 ```
 
-Buka: http://127.0.0.1:8000/login.html
+Buka: **http://127.0.0.1:8000/login.html**
+
+---
+
+## Development (Frontend + Backend Terpisah)
+
+**Terminal 1 — Backend API:**
+```powershell
+cd backend
+php artisan serve
+```
+
+**Terminal 2 — Frontend dev server:**
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Buka: **http://127.0.0.1:5173/login.html**
+
+---
 
 ## Demo Users
 
@@ -59,19 +89,47 @@ Password semua akun: `password`
 | PPIC | ppic@mes.local |
 | Production | production@mes.local |
 
+---
+
+## Git
+
+Perintah Git dijalankan dari **root project**:
+
+```powershell
+git status
+git add .
+git commit -m "pesan commit"
+git push origin main
+```
+
+Perintah Laravel/Composer dijalankan dari **folder backend/**:
+
+```powershell
+cd backend
+php artisan migrate
+php artisan test
+```
+
+---
+
 ## API
 
 Base URL: `/api/v1`
 
+---
+
 ## Tests
 
 ```powershell
-cd "D:\Nazila\MAGANG\MES_Cleaned_Project - Copy\backend"
+cd backend
 php artisan test
 ```
 
-## Catatan
+---
 
-- Root Git repository ada di folder **utama project**, bukan di `backend/`.
-- Frontend aktif untuk aplikasi berjalan berada di `backend/public/` (disajikan oleh Laravel).
-- Detail setup backend: lihat [backend/README.md](backend/README.md).
+## Dokumentasi
+
+- [Struktur Project](dokumentasi/STRUKTUR_PROJECT.md)
+- [Frontend README](frontend/README.md)
+- [Backend README](backend/README.md)
+- [User Guidebook](docs/MPMS_Implementation_User_Guide_v2.0.docx)

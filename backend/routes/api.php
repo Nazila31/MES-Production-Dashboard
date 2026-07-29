@@ -10,7 +10,14 @@ use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\SalesOrderController;
 use Illuminate\Support\Facades\Route;
 
+/*
+| MPMS API Routes — prefix: /api/v1
+| Auth: Sanctum Bearer token
+| RBAC: middleware role:admin,marketing,ppic,production
+*/
+
 Route::prefix('v1')->group(function () {
+    // ── Authentication ──────────────────────────────────────────────
     Route::post('/auth/login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -20,6 +27,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->middleware('role:admin,marketing,ppic,production');
 
+        // ── Quotations (Marketing + Admin) ────────────────────────────
         Route::get('/quotations/approved-for-so', [QuotationController::class, 'approvedForSo'])
             ->middleware('role:admin');
         Route::middleware('role:admin,marketing')->group(function () {
@@ -30,6 +38,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/quotations/{quotation}/follow-ups', [QuotationController::class, 'storeFollowUp']);
         });
 
+        // ── Sales Orders (Admin, PPIC, Production read) ───────────────
         Route::patch('/sales-orders/{sales_order}/deadlines', [SalesOrderController::class, 'updateDeadlines'])
             ->middleware('role:admin,ppic');
 
@@ -48,6 +57,7 @@ Route::prefix('v1')->group(function () {
             ->middleware('role:admin,ppic,production');
         Route::post('/sales-orders', [SalesOrderController::class, 'store'])->middleware('role:admin');
 
+        // ── PPIC Planning ─────────────────────────────────────────────
         Route::prefix('ppic')->middleware('role:ppic,admin')->group(function () {
             Route::get('/released-so', [PpicController::class, 'releasedSo']);
             Route::get('/bom/{sales_order}', [PpicController::class, 'getBom']);
@@ -59,6 +69,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/schedule', [PpicController::class, 'schedule']);
         });
 
+        // ── Production Floor ──────────────────────────────────────────
         Route::prefix('production')->middleware('role:production,admin')->group(function () {
             Route::get('/current', [ProductionController::class, 'current']);
             Route::get('/dashboard', [ProductionController::class, 'dashboard']);
@@ -70,12 +81,14 @@ Route::prefix('v1')->group(function () {
             Route::post('/{sales_order}/qc/reject', [ProductionController::class, 'rejectQc']);
         });
 
+        // ── Reports (Admin only) ──────────────────────────────────────
         Route::prefix('reports')->middleware('role:admin')->group(function () {
             Route::get('/', [ReportController::class, 'index']);
             Route::get('/export/csv', [ReportController::class, 'exportCsv']);
             Route::get('/export/pdf', [ReportController::class, 'exportPdf']);
         });
 
+        // ── Notifications (All authenticated roles) ───────────────────
         Route::prefix('notifications')->group(function () {
             Route::get('/', [NotificationController::class, 'index']);
             Route::get('/unread-count', [NotificationController::class, 'unreadCount']);

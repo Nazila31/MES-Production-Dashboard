@@ -1,0 +1,369 @@
+/* =========================================================
+    APP LAYOUT
+========================================================= */
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* =========================================================
+    SIDEBAR
+========================================================= */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+    background:#FFFFFF;
+    border-right:1px solid #E5E7EB;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:24px 18px;
+    transition:.3s ease;
+    z-index:100;
+}
+
+/* =========================================================
+    COMPANY LOGO
+========================================================= */
+.company-logo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding-bottom:10px;
+
+    margin-bottom:10px;
+
+    border-bottom:1px solid #EEF2F7;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.company-logo:hover{
+
+    text-decoration:none;
+
+    color:inherit;
+
+    opacity:.9;
+
+}
+
+.company-logo img{
+
+    width:200px;
+
+    height:auto;
+
+    object-fit:contain;
+
+    margin-bottom:10px;
+
+}
+
+.company-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.company-info small{
+
+    font-size:12px;
+
+    color:var(--text-muted);
+
+}
+
+/* =========================================================
+    SIDEBAR MENU
+========================================================= */
+.sidebar-menu{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.sidebar-menu li{
+    list-style:none;
+}
+
+.sidebar-menu a{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:7px 16px;
+    border-radius:10px;
+    color:var(--text-secondary);
+    font-size:15px;
+    font-weight:400;
+    transition:.25s;
+}
+
+.sidebar-menu a i{
+    width:22px;
+    text-align:center;
+    font-size:19px;
+}
+
+.sidebar-menu a:hover{
+    background:#EFF6FF;
+    color:var(--primary);
+}
+
+/* Active */
+.sidebar-menu a.active{
+    background:#EFF6FF;
+    color:var(--primary);
+    font-weight:600;
+}
+
+/* =========================================================
+    MAIN WRAPPER
+========================================================= */
+.main-wrapper{
+    margin-left:260px;
+    width:calc(100% - 260px);
+    min-height:100vh;
+    transition:.3s ease;
+}
+
+/* =========================================================
+    TOP NAVBAR
+========================================================= */
+.top-navbar{
+    height:72px;
+    background:#FFFFFF;
+    border-bottom:1px solid var(--border-color);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 8px;
+    position:sticky;
+    top:0;
+    z-index:99;
+}
+
+/* Left */
+.navbar-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+/* Right */
+.navbar-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+/* =========================================================
+    MENU BUTTON
+========================================================= */
+.menu-toggle{
+    width:42px;
+    height:42px;
+    border:none;
+    background:#FFFFFF;
+    border-radius:10px;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    transition:.25s;
+}
+
+.menu-toggle:hover{
+    background:#EFF6FF;
+    color:var(--primary);
+}
+
+/* =========================================================
+    CONTENT
+========================================================= */
+.content{
+    padding:20px;
+}
+
+/* =========================================================
+    SIDEBAR COLLAPSE
+========================================================= */
+.sidebar.collapsed{
+    width:82px;
+}
+
+.sidebar.collapsed .company-info{
+    display:none;
+}
+
+.sidebar.collapsed .company-logo{
+    padding-bottom:18px;
+}
+
+.sidebar.collapsed .company-logo img{
+    width:50px;
+    margin-bottom:0;
+}
+
+.sidebar.collapsed .sidebar-menu span{
+    display:none;
+}
+
+.sidebar.collapsed .sidebar-menu a{
+    justify-content:center;
+    padding:14px;
+}
+
+.sidebar.collapsed .sidebar-menu a.active{
+    border-left:none;
+}
+
+.main-wrapper.expanded{
+    margin-left:82px;
+    width:calc(100% - 82px);
+}
+
+/* ==========================================================
+   PROFILE DROPDOWN
+========================================================== */
+.profile-wrapper{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.profile-button{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border:none;
+    background:#FFFFFF;
+    cursor:pointer;
+    padding:6px 10px;
+    border-radius:12px;
+    transition:.25s;
+}
+
+.profile-button:hover{
+    background:#F8FAFC;
+}
+
+.profile-button img{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+}
+
+.profile-info strong{
+    font-size:14px;
+    color:#0F172A;
+}
+
+.profile-info small{
+    font-size:12px;
+    color:#94A3B8;
+
+}
+
+.profile-button i{
+    color:#64748B;
+    transition:.3s;
+}
+
+.profile-dropdown{
+    position:absolute;
+    top:58px;
+    right:0;
+    width:270px;
+    background:#FFFFFF;
+    border:1px solid #E5E7EB;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(15,23,42,.08);
+    display:none;
+    z-index:999;
+}
+
+.profile-dropdown.show{
+    display:block;
+}
+
+.profile-header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:18px;
+    background:#F8FAFC;
+    border-bottom:1px solid #EEF2F7;
+}
+
+.profile-header img{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+}
+
+.profile-header h6{
+    margin:0;
+    font-weight:600;
+}
+
+.profile-header small{
+    color:#94A3B8;
+}
+
+.profile-dropdown a{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:15px 18px;
+    color:#334155;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.profile-dropdown a:hover{
+    background:#EFF6FF;
+    color:#2563EB;
+    padding-left:24px;
+}
+
+.profile-dropdown a i{
+    width:20px;
+    text-align:center;
+    font-size:17px;
+}
+
+.profile-button.active i{
+
+    transform:rotate(180deg);
+
+}

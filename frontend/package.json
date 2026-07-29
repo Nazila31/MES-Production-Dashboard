@@ -1,0 +1,14 @@
+{
+  "name": "mpms-frontend",
+  "version": "2.0.0",
+  "private": true,
+  "description": "MPMS static frontend — HTML/CSS/JS",
+  "scripts": {
+    "dev": "vite",
+    "build": "node ../scripts/sync-frontend.js",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

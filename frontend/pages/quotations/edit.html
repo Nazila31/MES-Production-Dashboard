@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Quotation | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/pages.css">
+    <link rel="stylesheet" href="../../assets/css/edit-project.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+<body data-page="quotations" data-title="Edit Quotation" data-breadcrumb="Quotations / Edit">
+    <div class="app">
+        <aside class="sidebar"><div><a href="../../index.html" class="company-logo"><img src="../../assets/img/logo.PNG" alt="Logo"><div class="company-info"><small>Manufacturing Execution System</small></div></a><ul class="sidebar-menu"></ul></div></aside>
+        <div class="main-wrapper">
+            <header class="top-navbar"><div class="navbar-left"><button class="menu-toggle" id="menuToggle"><i class="bi bi-list"></i></button><div><h5 class="mb-0">Edit Quotation</h5><small class="text-muted">Quotations / Edit</small></div></div></header>
+            <main class="content">
+                <div class="page-header"><div><h2>Edit Quotation</h2><p>Update quotation information</p></div><a href="index.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a></div>
+                <div class="card-default">
+                    <form id="quotationForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-4"><label class="form-label">Quotation Number</label><input type="text" name="quotation_number" class="form-control" required></div>
+                            <div class="col-md-6 mb-4"><label class="form-label">Client</label><input type="text" name="client" class="form-control" required></div>
+                            <div class="col-md-6 mb-4"><label class="form-label">PIC</label><input type="text" name="pic" class="form-control" required></div>
+                            <div class="col-md-6 mb-4"><label class="form-label">Machine / Product</label><input type="text" name="machine" class="form-control" required></div>
+                            <div class="col-md-6 mb-4"><label class="form-label">Amount (IDR)</label><input type="number" name="amount" class="form-control" required></div>
+                            <div class="col-12"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="5"></textarea></div>
+                            <div class="col-md-6 mb-4"><label class="form-label">Upload Quotation File</label><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"></div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-action"><a href="index.html" class="btn btn-light">Cancel</a><button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Update Quotation</button></div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="success-overlay" id="successModal"><div class="success-card"><div class="success-icon"><i class="bi bi-check-circle-fill"></i></div><h3>Quotation Updated</h3><button class="btn btn-primary" onclick="finishSave()">Continue</button></div></div>
+    <script src="../../assets/js/config/app.config.js"></script>
+    <script src="../../assets/js/utils/path.js"></script>
+    <script src="../../assets/js/utils/constants.js"></script>
+    <script src="../../assets/js/utils/format.js"></script>
+    <script src="../../assets/js/api/auth.js"></script>
+    <script src="../../assets/js/api/client.js"></script>
+    <script src="../../assets/js/api/quotations.js"></script>
+    <script src="../../assets/js/components/layout.js"></script>
+    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/pages/quotation-form.js"></script>
+</body>
+</html>

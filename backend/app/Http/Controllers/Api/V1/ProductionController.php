@@ -278,6 +278,7 @@ class ProductionController extends Controller
         }
 
         $salesOrder->stageLogs()->where('stage', ProductionStage::Qc)->update([
+            'status' => StageLogStatus::Pending,
             'reject_notes' => $data['notes'],
             'return_to_stage' => $returnStage->value,
         ]);
@@ -337,6 +338,7 @@ class ProductionController extends Controller
                 'operator' => $log->operator?->name,
                 'duration_minutes' => $log->duration_minutes,
                 'reject_notes' => $log->reject_notes,
+                'return_to_stage' => $log->return_to_stage?->value,
             ]);
         }
 

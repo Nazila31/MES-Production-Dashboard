@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Manufacturing Execution System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <style>
+        body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #F8FAFC; }
+        .login-card { width: 100%; max-width: 420px; background: #fff; border-radius: 18px; padding: 40px; box-shadow: 0 20px 50px rgba(15,23,42,.08); border: 1px solid #E5E7EB; }
+        .login-logo { text-align: center; margin-bottom: 24px; }
+        .login-logo h4 { margin-top: 12px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-logo">
+            <i class="bi bi-gear-wide-connected fs-1 text-primary"></i>
+            <h4>MES Login</h4>
+            <p class="text-muted mb-0">PT Karya Machindo Industries</p>
+        </div>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required placeholder="admin@mes.local">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required placeholder="password">
+            </div>
+            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-right"></i> Sign In</button>
+        </form>
+        <div class="mt-4 small text-muted">
+            Demo: admin@mes.local / marketing@mes.local / ppic@mes.local / production@mes.local — password: <strong>password</strong>
+        </div>
+    </div>
+    <script src="assets/js/config/app.config.js"></script>
+    <script src="assets/js/utils/path.js"></script>
+    <script src="assets/js/api/client.js"></script>
+    <script src="assets/js/api/auth.js"></script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            try {
+                const data = await loginUser(form.email.value, form.password.value);
+                window.location.href = getRoleHomePage(data.user.role);
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+</html>
